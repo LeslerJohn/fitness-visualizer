@@ -321,27 +321,29 @@
         <div class="controls">
             <div class="preference-selector">
                 <div class="preference-group">
+                    <label for="food-category-select">🍎 Food Category:</label>
+                    <select id="food-category-select">
+                        <option value="">All Food Categories</option>
+                        <option value="breakfast">Breakfast Foods</option>
+                        <option value="lunch">Lunch Foods</option>
+                        <option value="dinner">Dinner Foods</option>
+                        <option value="snacks">Snack Foods</option>
+                    </select>
+                </div>
+                <div class="preference-group">
                     <label for="somatotype-select">🧬 Somatotype:</label>
                     <select id="somatotype-select">
                         <option value="">Select Somatotype</option>
                         <option value="ectomorph">Ectomorph</option>
                         <option value="mesomorph">Mesomorph</option>
                         <option value="endomorph">Endomorph</option>
-                        <option value="ecto-meso">Ecto-Mesomorph</option>
-                        <option value="meso-endo">Meso-Endomorph</option>
-                        <option value="endo-ecto">Endo-Ectomorph</option>
+                        <option value="meso-ecto">Meso-Ectomorph</option>
+                        <option value="endo-meso">Endo-Mesomorph</option>
+                        <option value="ecto-endo">Ecto-Endomorph</option>
                     </select>
                 </div>
                 <div class="preference-group">
-                    <label for="gender-select">⚥ Gender:</label>
-                    <select id="gender-select">
-                        <option value="">Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
-                </div>
-                <div class="preference-group">
-                    <label for="goal-select">🎯 Goal:</label>
+                    <label for="goal-select">� Goal:</label>
                     <select id="goal-select">
                         <option value="">Select Goal</option>
                         <option value="weight_loss">Weight Loss</option>
@@ -361,27 +363,10 @@
                         <option value="extremely_active">Extremely Active</option>
                     </select>
                 </div>
-                <div class="preference-group">
-                    <label for="experience-select">💪 Experience:</label>
-                    <select id="experience-select">
-                        <option value="">Select Experience</option>
-                        <option value="beginner">Beginner</option>
-                        <option value="intermediate">Intermediate</option>
-                        <option value="hard">Advanced</option>
-                    </select>
-                </div>
-                <div class="preference-group">
-                    <label for="location-select">🏠 Location:</label>
-                    <select id="location-select">
-                        <option value="">Select Location</option>
-                        <option value="gym">Gym</option>
-                        <option value="bodyweight">Home/Bodyweight</option>
-                    </select>
-                </div>
             </div>
             
             <div class="template-info" id="template-info">
-                🔍 Select your preferences to view matching food recommendations
+                🔍 Select somatotype, goal, and activity level to view food recommendations
             </div>
         </div>
 
@@ -496,13 +481,14 @@
 
         function mapSomatotype(selectedSomatotype) {
             // Map the 6-class somatotype to the template somatotype values
+            // Vice versa ordering: meso-ecto, endo-meso, ecto-endo
             const somatypeMapping = {
                 'ectomorph': 'ectomorph',
                 'mesomorph': 'mesomorph', 
                 'endomorph': 'endomorph',
-                'ecto-meso': 'ectomorph', // Use closest match for hybrid types
-                'meso-endo': 'mesomorph',
-                'endo-ecto': 'endomorph'
+                'meso-ecto': 'ectomorph', // Meso-Ectomorph maps to ectomorph
+                'endo-meso': 'mesomorph', // Endo-Mesomorph maps to mesomorph
+                'ecto-endo': 'endomorph'  // Ecto-Endomorph maps to endomorph
             };
             return somatypeMapping[selectedSomatotype] || selectedSomatotype;
         }
@@ -581,41 +567,37 @@
 
         function findMatchingTemplate() {
             const preferences = {
+                foodCategory: document.getElementById('food-category-select').value,
                 somatotype: document.getElementById('somatotype-select').value,
-                gender: document.getElementById('gender-select').value,
                 goal: document.getElementById('goal-select').value,
-                activity: document.getElementById('activity-select').value,
-                experience: document.getElementById('experience-select').value,
-                location: document.getElementById('location-select').value
+                activity: document.getElementById('activity-select').value
             };
 
-            // Check if all preferences are selected
-            const allSelected = Object.values(preferences).every(value => value !== '');
-            if (!allSelected) {
+            // Check if required preferences are selected (food category is optional)
+            const requiredSelected = preferences.somatotype && preferences.goal && preferences.activity;
+            if (!requiredSelected) {
                 currentTemplate = null;
-                updateTemplateInfo('🔍 Please select all preferences to view recommendations');
+                updateTemplateInfo('🔍 Please select somatotype, goal, and activity level to view recommendations');
                 document.getElementById('results-container').innerHTML = 
-                    '<div class="loading">📋 Complete your preferences to see personalized meal recommendations...</div>';
+                    '<div class="loading">📋 Select your preferences to see personalized meal recommendations...</div>';
                 return;
             }
 
             // Map the somatotype to template values
             const mappedSomatotype = mapSomatotype(preferences.somatotype);
 
-            // Find matching template
-            const template = allTemplates.find(t => 
+            // Find matching templates (we'll use any gender, experience, and location for now)
+            const matchingTemplates = allTemplates.filter(t => 
                 t.somatotype === mappedSomatotype &&
-                t.gender === preferences.gender.toLowerCase() &&
                 t.goal === preferences.goal.toLowerCase() &&
-                t.activity_level === preferences.activity.toLowerCase() &&
-                t.experience_level === preferences.experience.toLowerCase() &&
-                t.location === preferences.location.toLowerCase()
+                t.activity_level === preferences.activity.toLowerCase()
             );
 
-            if (template) {
-                currentTemplate = template;
-                updateTemplateInfo(`✅ Found matching template: ${template.template_id || 'Template Found'} (${preferences.somatotype})`);
-                renderMealRecommendations();
+            if (matchingTemplates.length > 0) {
+                // Use the first matching template
+                currentTemplate = matchingTemplates[0];
+                updateTemplateInfo(`✅ Found ${matchingTemplates.length} matching template(s): ${currentTemplate.template_id} (${preferences.somatotype})`);
+                renderMealRecommendations(preferences.foodCategory);
             } else {
                 currentTemplate = null;
                 updateTemplateInfo('❌ No template found for these preferences. Try different combinations.');
@@ -801,7 +783,7 @@
             return foodsString.split('|').map(food => food.trim()).filter(food => food !== '');
         }
 
-        function renderMealRecommendations() {
+        function renderMealRecommendations(selectedFoodCategory = '') {
             if (!currentTemplate) return;
 
             // Get all foods from template
@@ -829,7 +811,26 @@
                 organizedMeals[mealType].push(foodName);
             });
 
+            // Filter by selected food category if specified
+            if (selectedFoodCategory) {
+                const filteredMeals = {
+                    breakfast: [],
+                    lunch: [],
+                    dinner: [],
+                    snacks: []
+                };
+                filteredMeals[selectedFoodCategory] = organizedMeals[selectedFoodCategory];
+                organizedMeals.breakfast = selectedFoodCategory === 'breakfast' ? organizedMeals.breakfast : [];
+                organizedMeals.lunch = selectedFoodCategory === 'lunch' ? organizedMeals.lunch : [];
+                organizedMeals.dinner = selectedFoodCategory === 'dinner' ? organizedMeals.dinner : [];
+                organizedMeals.snacks = selectedFoodCategory === 'snacks' ? organizedMeals.snacks : [];
+            }
+
             // Create template details
+            const totalFoods = selectedFoodCategory ? 
+                organizedMeals[selectedFoodCategory].length : 
+                uniqueFoods.length;
+            
             const templateDetails = `
                 <div class="template-details">
                     <div class="template-id">📋 ${currentTemplate.template_id || 'Diet Template'}</div>
@@ -840,30 +841,46 @@
                         Fat: ${currentTemplate.fats_g || 'N/A'}g
                     </div>
                     <div style="margin-top: 10px; font-size: 12px; color: #666;">
-                        📊 Total Foods: ${uniqueFoods.length} | 
-                        🌅 Breakfast: ${organizedMeals.breakfast.length} | 
-                        ☀️ Lunch: ${organizedMeals.lunch.length} | 
-                        🌆 Dinner: ${organizedMeals.dinner.length} | 
-                        🍿 Snacks: ${organizedMeals.snacks.length}
+                        ${selectedFoodCategory ? 
+                            `📊 Showing ${selectedFoodCategory.charAt(0).toUpperCase() + selectedFoodCategory.slice(1)} Foods: ${organizedMeals[selectedFoodCategory].length}` :
+                            `📊 Total Foods: ${uniqueFoods.length} | 🌅 Breakfast: ${organizedMeals.breakfast.length} | ☀️ Lunch: ${organizedMeals.lunch.length} | 🌆 Dinner: ${organizedMeals.dinner.length} | 🍿 Snacks: ${organizedMeals.snacks.length}`
+                        }
                     </div>
                 </div>
             `;
 
-            // Create meal sections
-            const mealsHTML = `
-                <div class="meals-container">
-                    ${createMealSection('breakfast', organizedMeals.breakfast, 'breakfast-header')}
-                    ${createMealSection('lunch', organizedMeals.lunch, 'lunch-header')}
-                    ${createMealSection('dinner', organizedMeals.dinner, 'dinner-header')}
-                    ${createMealSection('snacks', organizedMeals.snacks, 'snacks-header')}
-                </div>
-            `;
+            // Create meal sections (show all or just selected category)
+            let mealsHTML = '';
+            if (selectedFoodCategory) {
+                // Show only selected category
+                const headerClasses = {
+                    'breakfast': 'breakfast-header',
+                    'lunch': 'lunch-header', 
+                    'dinner': 'dinner-header',
+                    'snacks': 'snacks-header'
+                };
+                mealsHTML = `
+                    <div class="meals-container" style="grid-template-columns: 1fr;">
+                        ${createMealSection(selectedFoodCategory, organizedMeals[selectedFoodCategory], headerClasses[selectedFoodCategory])}
+                    </div>
+                `;
+            } else {
+                // Show all categories
+                mealsHTML = `
+                    <div class="meals-container">
+                        ${createMealSection('breakfast', organizedMeals.breakfast, 'breakfast-header')}
+                        ${createMealSection('lunch', organizedMeals.lunch, 'lunch-header')}
+                        ${createMealSection('dinner', organizedMeals.dinner, 'dinner-header')}
+                        ${createMealSection('snacks', organizedMeals.snacks, 'snacks-header')}
+                    </div>
+                `;
+            }
 
             document.getElementById('results-container').innerHTML = templateDetails + mealsHTML;
         }
 
         function setupEventListeners() {
-            const selectors = ['somatotype-select', 'gender-select', 'goal-select', 'activity-select', 'experience-select', 'location-select'];
+            const selectors = ['food-category-select', 'somatotype-select', 'goal-select', 'activity-select'];
             selectors.forEach(id => {
                 document.getElementById(id).addEventListener('change', findMatchingTemplate);
             });
