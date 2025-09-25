@@ -286,7 +286,7 @@
         <div class="header">
             <h1>🏋️‍♂️ Exercise Template Visualizer</h1>
             <p>Complete Diet & Exercise Templates for All Somatotypes</p>
-            <p><strong>✅ GitHub Pages Ready • 📊 1080 Templates • 🎯 Proper Exercise IDs</strong></p>
+            <p><strong>✅ Live Data Loading • 📊 All 1080 Templates • 🎯 Proper Exercise IDs & GIFs</strong></p>
         </div>
 
         <div class="controls">
@@ -363,98 +363,61 @@
     </div>
 
     <script>
-        // EMBEDDED EXERCISE DATABASE - Key exercises with proper exercise IDs
-        const exerciseDatabase = {
-            // CHEST EXERCISES
-            "wDN97Ca": { "name": "machine inner chest press", "gifUrl": "https://static.exercisedb.dev/media/wDN97Ca.gif", "targetMuscles": ["chest"] },
-            "xLYSdtg": { "name": "dumbbell incline press", "gifUrl": "https://static.exercisedb.dev/media/xLYSdtg.gif", "targetMuscles": ["chest"] },
-            "v3xmPAR": { "name": "barbell bench press", "gifUrl": "https://static.exercisedb.dev/media/v3xmPAR.gif", "targetMuscles": ["chest"] },
-            "2Pya1cP": { "name": "dumbbell flyes", "gifUrl": "https://static.exercisedb.dev/media/2Pya1cP.gif", "targetMuscles": ["chest"] },
-            "TVdivgY": { "name": "chest dips", "gifUrl": "https://static.exercisedb.dev/media/TVdivgY.gif", "targetMuscles": ["chest"] },
-            "3QgteDK": { "name": "incline dumbbell press", "gifUrl": "https://static.exercisedb.dev/media/3QgteDK.gif", "targetMuscles": ["chest"] },
-            "27NNGFr": { "name": "decline bench press", "gifUrl": "https://static.exercisedb.dev/media/27NNGFr.gif", "targetMuscles": ["chest"] },
-            "P7zSvul": { "name": "pec deck", "gifUrl": "https://static.exercisedb.dev/media/P7zSvul.gif", "targetMuscles": ["chest"] },
-            
-            // SHOULDER EXERCISES
-            "4cWjYEN": { "name": "dumbbell overhead press", "gifUrl": "https://static.exercisedb.dev/media/4cWjYEN.gif", "targetMuscles": ["shoulders"] },
-            "W6PxUkg": { "name": "barbell overhead press", "gifUrl": "https://static.exercisedb.dev/media/W6PxUkg.gif", "targetMuscles": ["shoulders"] },
-            "CFN9P8G": { "name": "lateral raises", "gifUrl": "https://static.exercisedb.dev/media/CFN9P8G.gif", "targetMuscles": ["shoulders"] },
-            "Gi2BXfK": { "name": "rear delt flyes", "gifUrl": "https://static.exercisedb.dev/media/Gi2BXfK.gif", "targetMuscles": ["shoulders"] },
-            
-            // TRICEP EXERCISES
-            "UzkLrem": { "name": "dumbbell tricep extension", "gifUrl": "https://static.exercisedb.dev/media/UzkLrem.gif", "targetMuscles": ["triceps"] },
-            "hrrS0Ed": { "name": "tricep dips", "gifUrl": "https://static.exercisedb.dev/media/hrrS0Ed.gif", "targetMuscles": ["triceps"] },
-            "2KGnL6M": { "name": "close grip bench press", "gifUrl": "https://static.exercisedb.dev/media/2KGnL6M.gif", "targetMuscles": ["triceps"] },
-            "Ys97II0": { "name": "tricep pushdown", "gifUrl": "https://static.exercisedb.dev/media/Ys97II0.gif", "targetMuscles": ["triceps"] },
-            
-            // BACK EXERCISES
-            "4U7iLb5": { "name": "barbell row", "gifUrl": "https://static.exercisedb.dev/media/4U7iLb5.gif", "targetMuscles": ["back"] },
-            "WME869U": { "name": "lat pulldown", "gifUrl": "https://static.exercisedb.dev/media/WME869U.gif", "targetMuscles": ["back"] },
-            "OmQ8w0p": { "name": "seated cable row", "gifUrl": "https://static.exercisedb.dev/media/OmQ8w0p.gif", "targetMuscles": ["back"] },
-            "G8dXpNG": { "name": "pull ups", "gifUrl": "https://static.exercisedb.dev/media/G8dXpNG.gif", "targetMuscles": ["back"] },
-            "aaXr7ld": { "name": "deadlifts", "gifUrl": "https://static.exercisedb.dev/media/aaXr7ld.gif", "targetMuscles": ["back"] },
-            "BJ0Hz5L": { "name": "t-bar row", "gifUrl": "https://static.exercisedb.dev/media/BJ0Hz5L.gif", "targetMuscles": ["back"] },
-            "vpp9Ku2": { "name": "wide grip pulldown", "gifUrl": "https://static.exercisedb.dev/media/vpp9Ku2.gif", "targetMuscles": ["back"] },
-            "w2oRpuH": { "name": "reverse flyes", "gifUrl": "https://static.exercisedb.dev/media/w2oRpuH.gif", "targetMuscles": ["back"] },
-            
-            // BICEP EXERCISES
-            "WLvTAv5": { "name": "barbell curls", "gifUrl": "https://static.exercisedb.dev/media/WLvTAv5.gif", "targetMuscles": ["biceps"] },
-            "vKilzz3": { "name": "dumbbell curls", "gifUrl": "https://static.exercisedb.dev/media/vKilzz3.gif", "targetMuscles": ["biceps"] },
-            "BKa8dmT": { "name": "hammer curls", "gifUrl": "https://static.exercisedb.dev/media/BKa8dmT.gif", "targetMuscles": ["biceps"] },
-            "DpWMFP5": { "name": "cable curls", "gifUrl": "https://static.exercisedb.dev/media/DpWMFP5.gif", "targetMuscles": ["biceps"] },
-            "61GrD55": { "name": "preacher curls", "gifUrl": "https://static.exercisedb.dev/media/61GrD55.gif", "targetMuscles": ["biceps"] },
-            "OVTZ65k": { "name": "concentration curls", "gifUrl": "https://static.exercisedb.dev/media/OVTZ65k.gif", "targetMuscles": ["biceps"] },
-            "u3UuCZu": { "name": "incline dumbbell curls", "gifUrl": "https://static.exercisedb.dev/media/u3UuCZu.gif", "targetMuscles": ["biceps"] },
-            
-            // LEG EXERCISES
-            "RGLscZM": { "name": "barbell squat", "gifUrl": "https://static.exercisedb.dev/media/RGLscZM.gif", "targetMuscles": ["quadriceps"] },
-            "8IbNZwc": { "name": "leg press", "gifUrl": "https://static.exercisedb.dev/media/8IbNZwc.gif", "targetMuscles": ["quadriceps"] },
-            "2DxtqHL": { "name": "leg curls", "gifUrl": "https://static.exercisedb.dev/media/2DxtqHL.gif", "targetMuscles": ["hamstrings"] },
-            "euI1BwR": { "name": "calf raises", "gifUrl": "https://static.exercisedb.dev/media/euI1BwR.gif", "targetMuscles": ["calves"] },
-            "RRWFUcw": { "name": "lunges", "gifUrl": "https://static.exercisedb.dev/media/RRWFUcw.gif", "targetMuscles": ["quadriceps"] },
-            "cwsAI4G": { "name": "leg extensions", "gifUrl": "https://static.exercisedb.dev/media/cwsAI4G.gif", "targetMuscles": ["quadriceps"] },
-            "JrOHAZc": { "name": "romanian deadlift", "gifUrl": "https://static.exercisedb.dev/media/JrOHAZc.gif", "targetMuscles": ["hamstrings"] },
-            "d960PgE": { "name": "walking lunges", "gifUrl": "https://static.exercisedb.dev/media/d960PgE.gif", "targetMuscles": ["quadriceps"] },
-            "kuMiR2T": { "name": "bulgarian split squats", "gifUrl": "https://static.exercisedb.dev/media/kuMiR2T.gif", "targetMuscles": ["quadriceps"] },
-            "iYzB0Cz": { "name": "leg press calf raise", "gifUrl": "https://static.exercisedb.dev/media/iYzB0Cz.gif", "targetMuscles": ["calves"] },
-            
-            // TRAPS EXERCISES
-            "jQGwmxN": { "name": "barbell shrugs", "gifUrl": "https://static.exercisedb.dev/media/jQGwmxN.gif", "targetMuscles": ["traps"] },
-            "NJzBsGJ": { "name": "dumbbell shrugs", "gifUrl": "https://static.exercisedb.dev/media/NJzBsGJ.gif", "targetMuscles": ["traps"] },
-            
-            // BODYWEIGHT EXERCISES
-            "bJYHBIN": { "name": "bodyweight standing calf raise", "gifUrl": "https://static.exercisedb.dev/media/bJYHBIN.gif", "targetMuscles": ["calves"] },
-            "QpXqiq8": { "name": "push ups", "gifUrl": "https://static.exercisedb.dev/media/QpXqiq8.gif", "targetMuscles": ["chest"] },
-            "lBDjFxJ": { "name": "burpees", "gifUrl": "https://static.exercisedb.dev/media/lBDjFxJ.gif", "targetMuscles": ["full body"] },
-            "qaZVsGk": { "name": "mountain climbers", "gifUrl": "https://static.exercisedb.dev/media/qaZVsGk.gif", "targetMuscles": ["abs"] },
-            "YAk5dIw": { "name": "jumping jacks", "gifUrl": "https://static.exercisedb.dev/media/YAk5dIw.gif", "targetMuscles": ["full body"] },
-            "y5p0H8a": { "name": "plank", "gifUrl": "https://static.exercisedb.dev/media/y5p0H8a.gif", "targetMuscles": ["abs"] },
-            "99rWm7w": { "name": "squats", "gifUrl": "https://static.exercisedb.dev/media/99rWm7w.gif", "targetMuscles": ["quadriceps"] },
-            "C0eCeEt": { "name": "lunges", "gifUrl": "https://static.exercisedb.dev/media/C0eCeEt.gif", "targetMuscles": ["quadriceps"] },
-            "bZGHsAZ": { "name": "diamond push ups", "gifUrl": "https://static.exercisedb.dev/media/bZGHsAZ.gif", "targetMuscles": ["triceps"] },
-            "2Dk4xQV": { "name": "pike push ups", "gifUrl": "https://static.exercisedb.dev/media/2Dk4xQV.gif", "targetMuscles": ["shoulders"] },
-            "b63ZzGe": { "name": "jump squats", "gifUrl": "https://static.exercisedb.dev/media/b63ZzGe.gif", "targetMuscles": ["quadriceps"] },
-            "u5ESqzH": { "name": "single leg glute bridge", "gifUrl": "https://static.exercisedb.dev/media/u5ESqzH.gif", "targetMuscles": ["glutes"] },
-            "Rsxr3xl": { "name": "reverse crunches", "gifUrl": "https://static.exercisedb.dev/media/Rsxr3xl.gif", "targetMuscles": ["abs"] },
-            "QFmz6ch": { "name": "side plank", "gifUrl": "https://static.exercisedb.dev/media/QFmz6ch.gif", "targetMuscles": ["abs"] },
-            "P9GFBME": { "name": "wall sit", "gifUrl": "https://static.exercisedb.dev/media/P9GFBME.gif", "targetMuscles": ["quadriceps"] }
-        };
-
-        // EMBEDDED TEMPLATE DATA - Comprehensive sample from your actual data
-        const templateDataCSV = `template_id,somatotype,gender,goal,activity_level,exercise_complexity,exercise_type,total_calories,protein_g,carbs_g,fats_g,protein_pct,carbs_pct,fats_pct,breakfast_foods,lunch_foods,dinner_foods,snack_foods,diet_principles,fitness_strategy,fitness_split_strength,fitness_split_cardio,push_exercises,pull_exercises,legs_exercises,bodyweight_exercises,description
-ECTO_M_LOSS_SEDE_BEG_GYM_4B5B,ectomorph,male,weight_loss,sedentary,beginner,gym,1728,129.6,172.8,57.6,30,40,30,"Veggie Burger, On Bun, With Cheese | Black Beans And Rice, From Fast Food / Restaurant | Nutritional Powder Mix, Light (Muscle Milk) | Hot Dog Sandwich, Vegetarian, On Bread","Chicken Fillet Sandwich, From School Cafeteria | Crackers, Cheese (Goldfish) | Burrito Bowl, Beef Or Pork | Roast Beef Sandwich On Wheat, With Cheese | Black Beans And Rice, From Fast Food / Restaurant","Crackers, Cheese (Goldfish) | Chicken Fillet Sandwich, From School Cafeteria | Burrito Bowl, Beef Or Pork | Roast Beef Sandwich On Wheat, With Cheese | Pizza, Cheese And Vegetables, Whole Wheat Thick Crust","Peanuts, Dry Roasted, Lightly Salted | Bagel, Wheat, With Fruit And Nuts | Wheat Bran","Focus on nutrient-dense foods | Maintain muscle mass during deficit | Don't cut calories too drastically | Include healthy fats and complex carbs","Focus on resistance training to maintain muscle mass during cut with minimal cardio.",3,4,"wDN97Ca,xLYSdtg,v3xmPAR,2Pya1cP,4cWjYEN,W6PxUkg,UzkLrem,hrrS0Ed","4U7iLb5,WME869U,OmQ8w0p,G8dXpNG,WLvTAv5,vKilzz3,BKa8dmT","RGLscZM,8IbNZwc,2DxtqHL,euI1BwR,RRWFUcw,cwsAI4G","","Naturally lean and struggles to gain weight, fast metabolism"
-ECTO_M_LOSS_SEDE_BEG_BWE_7EF2,ectomorph,male,weight_loss,sedentary,beginner,bodyweight,1728,129.6,172.8,57.6,30,40,30,"Veggie Burger, On Bun, With Cheese | Black Beans And Rice, From Fast Food / Restaurant | Nutritional Powder Mix, Light (Muscle Milk) | Hot Dog Sandwich, Vegetarian, On Bread","Chicken Fillet Sandwich, From School Cafeteria | Crackers, Cheese (Goldfish) | Burrito Bowl, Beef Or Pork | Roast Beef Sandwich On Wheat, With Cheese | Black Beans And Rice, From Fast Food / Restaurant","Crackers, Cheese (Goldfish) | Chicken Fillet Sandwich, From School Cafeteria | Burrito Bowl, Beef Or Pork | Roast Beef Sandwich On Wheat, With Cheese | Pizza, Cheese And Vegetables, Whole Wheat Thick Crust","Peanuts, Dry Roasted, Lightly Salted | Bagel, Wheat, With Fruit And Nuts | Wheat Bran","Focus on nutrient-dense foods | Maintain muscle mass during deficit | Don't cut calories too drastically | Include healthy fats and complex carbs","Focus on resistance training to maintain muscle mass during cut with minimal cardio.",3,4,"","","","bJYHBIN,QpXqiq8,lBDjFxJ,qaZVsGk,YAk5dIw,y5p0H8a,99rWm7w,C0eCeEt","Naturally lean and struggles to gain weight, fast metabolism"
-MESO_F_GAIN_LITE_INT_GYM_A3B4,mesomorph,female,weight_gain,lightly_active,intermediate,gym,2200,165.0,220.0,73.3,30,40,30,"Filipino Breakfast Rice Bowl | Pork Adobo with Rice | Chicken Inasal | Longganisa with Rice","Sinigang na Baboy | Beef Kare-Kare | Pancit Canton | Lechon Kawali with Rice","Grilled Tilapia with Rice | Pork Sisig | Beef Caldereta | Chicken Curry with Rice","Biko (Rice Cake) | Turon | Halo-Halo | Fresh Mango","Focus on caloric surplus for muscle gain | Include complex carbs and lean proteins | Time meals around workouts | Stay hydrated","Moderate resistance training with progressive overload for muscle building.",4,3,"wDN97Ca,xLYSdtg,v3xmPAR,2Pya1cP,4cWjYEN,W6PxUkg,UzkLrem,hrrS0Ed","4U7iLb5,WME869U,OmQ8w0p,G8dXpNG,WLvTAv5,vKilzz3,BKa8dmT","RGLscZM,8IbNZwc,2DxtqHL,euI1BwR,RRWFUcw,cwsAI4G","","Naturally muscular and athletic build, responds well to training"
-ENDO_M_MAINTENANCE_VERY_ADV_BWE_X7Y9,endomorph,male,maintenance,very_active,hard,bodyweight,2800,210.0,280.0,93.3,30,40,30,"Tapsilog (Tapa with Rice and Egg) | Beef Pares with Rice | Chicken Tocino","Adobong Manok | Pork Menudo | Beef Mechado | Pancit Bihon","Grilled Bangus | Pork Barbecue | Chicken Afritada | Vegetable Lumpia","Bibingka | Leche Flan | Mais Con Yelo | Fresh Papaya","Monitor portion sizes | Focus on whole foods | Balance macronutrients | Regular meal timing","High-intensity bodyweight training with metabolic conditioning.",5,5,"","","","bJYHBIN,QpXqiq8,lBDjFxJ,qaZVsGk,YAk5dIw,y5p0H8a,99rWm7w,C0eCeEt","Naturally heavier build, tends to gain weight easily, slower metabolism"
-ECTO_ENDO_F_LOSS_MODR_BEG_GYM_C8E1,ecto_endo,female,weight_loss,moderately_active,beginner,gym,1900,142.5,190.0,63.3,30,40,30,"Pandesal with Cheese | Rice Porridge (Lugaw) | Scrambled Eggs with Rice | Coffee","Chicken Adobo with Rice | Vegetable Spring Rolls | Grilled Fish | Steamed Rice","Pork Sinigang | Beef Stir-fry | Fried Rice | Mixed Vegetables","Fresh Fruits | Rice Cakes | Nuts | Filipino Cookies","Balance between ecto and endo nutrition needs | Moderate calorie restriction | Focus on whole foods | Regular meal timing","Balanced approach combining strength training with moderate cardio for body composition.",3,4,"TVdivgY,3QgteDK,27NNGFr,P7zSvul,CFN9P8G,Gi2BXfK,2KGnL6M,Ys97II0","aaXr7ld,BJ0Hz5L,vpp9Ku2,w2oRpuH,DpWMFP5,61GrD55,OVTZ65k","JrOHAZc,d960PgE,kuMiR2T,iYzB0Cz,jQGwmxN,NJzBsGJ","","Combination of lean and softer body characteristics, varied metabolic response"
-MESO_ECTO_M_GAIN_VERY_INT_GYM_F2A7,meso_ecto,male,weight_gain,very_active,intermediate,gym,3100,232.5,310.0,103.3,30,40,30,"Filipino Breakfast Platter | Beef Tapa with Rice | Longganisa and Eggs | Iced Coffee","Pork Adobo | Chicken Curry | Beef Caldereta | Steamed Rice | Vegetables","Grilled Pork | Fish Sinigang | Beef Stew | Rice | Side Salad","Halo-Halo | Rice Cakes | Mixed Nuts | Dried Fruits","High caloric intake for muscle building | Focus on protein timing | Complex carbs around workouts | Stay hydrated","Intensive muscle building program with minimal cardio for maximum mass gain.",5,2,"wDN97Ca,xLYSdtg,v3xmPAR,2Pya1cP,4cWjYEN,W6PxUkg,UzkLrem,hrrS0Ed","4U7iLb5,WME869U,OmQ8w0p,G8dXpNG,WLvTAv5,vKilzz3,BKa8dmT","RGLscZM,8IbNZwc,2DxtqHL,euI1BwR,RRWFUcw,cwsAI4G","","Athletic build with lean tendencies, good muscle building potential"
-ENDO_MESO_F_MAINTENANCE_LITE_ADV_BWE_G5H8,endo_meso,female,maintenance,lightly_active,hard,bodyweight,2100,157.5,210.0,70.0,30,40,30,"Rice with Egg | Filipino Sausage | Bread | Coffee with Milk","Chicken and Rice | Vegetable Soup | Grilled Fish | Fresh Fruit","Pork Stir-fry | Mixed Vegetables | Rice | Filipino Dessert","Crackers | Fresh Fruit | Nuts | Rice Snacks","Balance between endomorph and mesomorph needs | Portion control important | Focus on nutrient timing | Include metabolism boosting foods","Advanced bodyweight circuits focusing on strength and metabolic conditioning.",4,4,"","","","bZGHsAZ,2Dk4xQV,b63ZzGe,u5ESqzH,Rsxr3xl,QFmz6ch,P9GFBME,QpXqiq8","Muscular build with tendency to store fat, responds well to training but needs careful nutrition management"
-ECTO_M_GAIN_EXTR_INT_GYM_B6C9,ectomorph,male,weight_gain,extremely_active,intermediate,gym,3400,255.0,340.0,113.3,30,40,30,"High-Calorie Breakfast Bowl | Protein Pancakes | Eggs and Rice | Mass Gainer Shake","Large Chicken Meal | Rice and Beans | Protein Bar | Whole Milk","Beef Steak | Large Rice Portion | Vegetables | Post-Workout Shake","Mass Gainer | Nuts | Dried Fruits | Protein Cookies","Very high caloric intake needed | Focus on calorie-dense foods | Multiple meals per day | Post-workout nutrition critical","Intensive muscle building with minimal cardio to maximize weight gain.",5,1,"wDN97Ca,xLYSdtg,v3xmPAR,2Pya1cP,4cWjYEN,W6PxUkg,UzkLrem,hrrS0Ed","4U7iLb5,WME869U,OmQ8w0p,G8dXpNG,WLvTAv5,vKilzz3,BKa8dmT","RGLscZM,8IbNZwc,2DxtqHL,euI1BwR,RRWFUcw,cwsAI4G","","Naturally very lean with fast metabolism, requires very high calories to gain weight"
-MESO_M_LOSS_SEDE_ADV_GYM_H7I2,mesomorph,male,weight_loss,sedentary,hard,gym,2000,150.0,200.0,66.7,30,40,30,"Protein Oatmeal | Greek Yogurt | Berries | Coffee","Grilled Chicken Breast | Brown Rice | Vegetables | Salad","Lean Fish | Sweet Potato | Steamed Broccoli | Small Portion Rice","Protein Shake | Raw Almonds | Apple | Greek Yogurt","Moderate calorie deficit | High protein to maintain muscle | Time carbs around workouts | Focus on nutrient density","Advanced training with supersets and compound movements for maximum fat loss while preserving muscle.",4,3,"wDN97Ca,xLYSdtg,v3xmPAR,2Pya1cP,4cWjYEN,W6PxUkg,UzkLrem,hrrS0Ed","4U7iLb5,WME869U,OmQ8w0p,G8dXpNG,WLvTAv5,vKilzz3,BKa8dmT","RGLscZM,8IbNZwc,2DxtqHL,euI1BwR,RRWFUcw,cwsAI4G","","Naturally athletic and muscular, responds well to both muscle building and fat loss"
-ENDO_F_GAIN_MODR_BEG_BWE_J3K6,endomorph,female,weight_gain,moderately_active,beginner,bodyweight,2300,172.5,230.0,76.7,30,40,30,"Protein-Rich Breakfast | Rice with Vegetables | Filipino Coffee | Small Fruit","Lean Protein with Rice | Vegetable Side | Small Dessert | Water","Grilled Fish or Chicken | Mixed Vegetables | Rice | Healthy Fats","Controlled Portions of Snacks | Fruits | Nuts in Moderation","Careful calorie management even for weight gain | Focus on lean muscle gain | Watch portion sizes | Choose nutrient-dense foods","Beginner bodyweight program focusing on building strength foundation and lean muscle.",3,3,"","","","bJYHBIN,QpXqiq8,lBDjFxJ,qaZVsGk,YAk5dIw,y5p0H8a,99rWm7w,C0eCeEt","Naturally heavier build with slower metabolism, gains weight easily but also builds muscle well with proper training"`;
-
+        // Global variables to store loaded data
+        let exerciseDatabase = {};
         let allTemplates = [];
         let filteredTemplates = [];
+
+        // Load data from actual files
+        async function loadData() {
+            try {
+                console.log('🔄 Loading data from files...');
+                
+                // Load CSV templates
+                const csvResponse = await fetch('./fixed_comprehensive_diet_templates_with_proper_exercise_ids.csv');
+                if (!csvResponse.ok) {
+                    throw new Error(`Failed to load CSV: ${csvResponse.status} ${csvResponse.statusText}`);
+                }
+                const csvText = await csvResponse.text();
+                console.log('✅ CSV loaded successfully');
+                
+                // Load exercise database
+                const exerciseResponse = await fetch('./exercises.json');
+                if (!exerciseResponse.ok) {
+                    throw new Error(`Failed to load exercises: ${exerciseResponse.status} ${exerciseResponse.statusText}`);
+                }
+                const allExerciseData = await exerciseResponse.json();
+                console.log('✅ Exercise database loaded successfully:', allExerciseData.length, 'exercises');
+                
+                // Convert exercise array to lookup object
+                exerciseDatabase = {};
+                allExerciseData.forEach(exercise => {
+                    exerciseDatabase[exercise.exerciseId] = exercise;
+                });
+                console.log('✅ Exercise database indexed by ID');
+                
+                // Parse CSV data
+                allTemplates = parseCSVData(csvText);
+                filteredTemplates = [...allTemplates];
+                console.log('✅ Templates parsed:', allTemplates.length);
+                
+                // Initialize the app
+                renderTemplates();
+                updateStats();
+                setupEventListeners();
+                
+            } catch (error) {
+                console.error('❌ Error loading data:', error);
+                document.getElementById('templates-container').innerHTML = `
+                    <div class="error">
+                        ❌ Error loading data: ${error.message}
+                        <br><br>Please ensure all files are in the correct location:
+                        <br>• fixed_comprehensive_diet_templates_with_proper_exercise_ids.csv
+                        <br>• data/datasets/fitness/data/exercises.json
+                    </div>
+                `;
+            }
+        }
 
         // Utility Functions
         function parseCSVData(csvString) {
@@ -510,12 +473,13 @@ ENDO_F_GAIN_MODR_BEG_BWE_J3K6,endomorph,female,weight_gain,moderately_active,beg
         function createExerciseElement(exerciseId) {
             const exercise = exerciseDatabase[exerciseId];
             if (!exercise) {
+                console.warn('Exercise not found:', exerciseId);
                 return `
                     <div class="exercise-item">
                         <div class="exercise-image" style="background: #ddd; display: flex; align-items: center; justify-content: center; color: #666; font-size: 10px;">
-                            No Image
+                            Not Found
                         </div>
-                        <div class="exercise-name">Unknown Exercise</div>
+                        <div class="exercise-name">${exerciseId}</div>
                     </div>
                 `;
             }
@@ -523,7 +487,8 @@ ENDO_F_GAIN_MODR_BEG_BWE_J3K6,endomorph,female,weight_gain,moderately_active,beg
             return `
                 <div class="exercise-item">
                     <img src="${exercise.gifUrl}" alt="${exercise.name}" class="exercise-image" loading="lazy" 
-                         onerror="this.style.background='#ddd'; this.style.color='#666'; this.innerHTML='GIF';">
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'; this.nextElementSibling.style.alignItems='center'; this.nextElementSibling.style.justifyContent='center'; this.nextElementSibling.style.background='#ddd'; this.nextElementSibling.style.color='#666'; this.nextElementSibling.style.fontSize='10px'; this.nextElementSibling.innerHTML='No GIF';">
+                    <div style="display:none; width: 70px; height: 70px; border-radius: 6px; margin-bottom: 8px;">No GIF</div>
                     <div class="exercise-name">${exercise.name}</div>
                 </div>
             `;
@@ -656,37 +621,15 @@ ENDO_F_GAIN_MODR_BEG_BWE_J3K6,endomorph,female,weight_gain,moderately_active,beg
             stats.textContent = `📊 Showing ${filteredTemplates.length} of ${allTemplates.length} templates`;
         }
 
-        function initializeApp() {
-            try {
-                // Parse embedded CSV data
-                allTemplates = parseCSVData(templateDataCSV);
-                filteredTemplates = [...allTemplates];
-                
-                console.log('Loaded templates:', allTemplates.length);
-                
-                // Render initial templates
-                renderTemplates();
-                updateStats();
-
-                // Add event listeners for filters
-                const filterIds = ['somatotype-filter', 'gender-filter', 'goal-filter', 'activity-filter', 'complexity-filter', 'type-filter'];
-                filterIds.forEach(id => {
-                    document.getElementById(id).addEventListener('change', applyFilters);
-                });
-
-            } catch (error) {
-                console.error('Error initializing app:', error);
-                document.getElementById('templates-container').innerHTML = `
-                    <div class="error">
-                        ❌ Error loading templates: ${error.message}
-                        <br><br>This is an embedded version with sample data for GitHub Pages compatibility.
-                    </div>
-                `;
-            }
+        function setupEventListeners() {
+            const filterIds = ['somatotype-filter', 'gender-filter', 'goal-filter', 'activity-filter', 'complexity-filter', 'type-filter'];
+            filterIds.forEach(id => {
+                document.getElementById(id).addEventListener('change', applyFilters);
+            });
         }
 
-        // Initialize when DOM is loaded
-        document.addEventListener('DOMContentLoaded', initializeApp);
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', loadData);
     </script>
 </body>
 </html>
