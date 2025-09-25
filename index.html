@@ -42,6 +42,32 @@
             opacity: 0.9;
         }
 
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .nav-button {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #ff5252 0%, #e53e3e 100%);
+        }
+
         .controls {
             background: white;
             padding: 20px;
@@ -287,6 +313,12 @@
             <h1>🏋️‍♂️ Exercise Template Visualizer</h1>
             <p>Complete Diet & Exercise Templates for All Somatotypes</p>
             <p><strong>✅ Live Data Loading • 📊 All 1080 Templates • 🎯 Proper Exercise IDs & GIFs</strong></p>
+        </div>
+
+        <div class="navigation">
+            <a href="food_visualizer.html" class="nav-button">
+                🍽️ View Food Recommendations
+            </a>
         </div>
 
         <div class="controls">

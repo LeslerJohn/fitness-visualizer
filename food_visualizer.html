@@ -42,6 +42,32 @@
             opacity: 0.9;
         }
 
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .nav-button {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #8e44ad 0%, #732d91 100%);
+        }
+
         .controls {
             background: white;
             padding: 25px;
@@ -316,6 +342,12 @@
             <h1>🍽️ Meal-Based Food Recommendations</h1>
             <p>Personalized Diet Templates by User Preference</p>
             <p><strong>✅ Template-Based • 🎯 Macro Tracking • 📊 Meal Organization</strong></p>
+        </div>
+
+        <div class="navigation">
+            <a href="index.html" class="nav-button">
+                🏋️‍♂️ View Exercise Templates
+            </a>
         </div>
 
         <div class="controls">
