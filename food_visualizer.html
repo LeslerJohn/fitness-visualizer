@@ -324,55 +324,58 @@
                     <label for="somatotype-select">🧬 Somatotype:</label>
                     <select id="somatotype-select">
                         <option value="">Select Somatotype</option>
-                        <option value="ECTO">Ectomorph</option>
-                        <option value="MESO">Mesomorph</option>
-                        <option value="ENDO">Endomorph</option>
+                        <option value="ectomorph">Ectomorph</option>
+                        <option value="mesomorph">Mesomorph</option>
+                        <option value="endomorph">Endomorph</option>
+                        <option value="ecto-meso">Ecto-Mesomorph</option>
+                        <option value="meso-endo">Meso-Endomorph</option>
+                        <option value="endo-ecto">Endo-Ectomorph</option>
                     </select>
                 </div>
                 <div class="preference-group">
                     <label for="gender-select">⚥ Gender:</label>
                     <select id="gender-select">
                         <option value="">Select Gender</option>
-                        <option value="M">Male</option>
-                        <option value="F">Female</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
                     </select>
                 </div>
                 <div class="preference-group">
                     <label for="goal-select">🎯 Goal:</label>
                     <select id="goal-select">
                         <option value="">Select Goal</option>
-                        <option value="WEIGHT_LOSS">Weight Loss</option>
-                        <option value="WEIGHT_GAIN">Weight Gain</option>
-                        <option value="MUSCLE_GAIN">Muscle Gain</option>
-                        <option value="MAINTENANCE">Maintenance</option>
+                        <option value="weight_loss">Weight Loss</option>
+                        <option value="weight_gain">Weight Gain</option>
+                        <option value="muscle_gain">Muscle Gain</option>
+                        <option value="maintenance">Maintenance</option>
                     </select>
                 </div>
                 <div class="preference-group">
                     <label for="activity-select">🏃 Activity Level:</label>
                     <select id="activity-select">
                         <option value="">Select Activity</option>
-                        <option value="SEDE">Sedentary</option>
-                        <option value="LIGHTLY_ACTIVE">Lightly Active</option>
-                        <option value="MODERATELY_ACTIVE">Moderately Active</option>
-                        <option value="VERY_ACTIVE">Very Active</option>
-                        <option value="EXTREMELY_ACTIVE">Extremely Active</option>
+                        <option value="sedentary">Sedentary</option>
+                        <option value="lightly_active">Lightly Active</option>
+                        <option value="moderately_active">Moderately Active</option>
+                        <option value="very_active">Very Active</option>
+                        <option value="extremely_active">Extremely Active</option>
                     </select>
                 </div>
                 <div class="preference-group">
                     <label for="experience-select">💪 Experience:</label>
                     <select id="experience-select">
                         <option value="">Select Experience</option>
-                        <option value="BEG">Beginner</option>
-                        <option value="INT">Intermediate</option>
-                        <option value="ADV">Advanced</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="hard">Advanced</option>
                     </select>
                 </div>
                 <div class="preference-group">
                     <label for="location-select">🏠 Location:</label>
                     <select id="location-select">
                         <option value="">Select Location</option>
-                        <option value="GYM">Gym</option>
-                        <option value="HOME">Home</option>
+                        <option value="gym">Gym</option>
+                        <option value="bodyweight">Home/Bodyweight</option>
                     </select>
                 </div>
             </div>
@@ -408,7 +411,7 @@
                 console.log('✅ Templates loaded');
                 
                 // Load food database
-                const foodResponse = await fetch('./optimized_diet_recommendation_database.csv');
+                const foodResponse = await fetch('./data/datasets/diet/fndds_processed/optimized_diet_recommendation_database.csv');
                 if (!foodResponse.ok) {
                     throw new Error(`Failed to load food database: ${foodResponse.status}`);
                 }
@@ -433,7 +436,7 @@
                         ❌ Error loading data: ${error.message}
                         <br><br>Please ensure these files exist:
                         <br>• fixed_comprehensive_diet_templates_with_proper_exercise_ids.csv
-                        <br>• optimized_diet_recommendation_database.csv
+                        <br>• data/datasets/diet/fndds_processed/optimized_diet_recommendation_database.csv
                     </div>
                 `;
             }
@@ -478,7 +481,102 @@
             allFoods.forEach(food => {
                 const foodName = food.Food_Item.toLowerCase().trim();
                 matchingFoods[foodName] = food;
+                
+                // Also create partial matches for better food matching
+                const words = foodName.split(/\s+/);
+                if (words.length > 2) {
+                    // Create key from first 2-3 significant words
+                    const shortKey = words.slice(0, 3).join(' ');
+                    if (!matchingFoods[shortKey]) {
+                        matchingFoods[shortKey] = food;
+                    }
+                }
             });
+        }
+
+        function mapSomatotype(selectedSomatotype) {
+            // Map the 6-class somatotype to the template somatotype values
+            const somatypeMapping = {
+                'ectomorph': 'ectomorph',
+                'mesomorph': 'mesomorph', 
+                'endomorph': 'endomorph',
+                'ecto-meso': 'ectomorph', // Use closest match for hybrid types
+                'meso-endo': 'mesomorph',
+                'endo-ecto': 'endomorph'
+            };
+            return somatypeMapping[selectedSomatotype] || selectedSomatotype;
+        }
+
+        function categorizeFoodByMealType(foodName, foodDetails) {
+            // Use Enhanced_Category and Meal_Timing from food database to determine meal type
+            const mealTiming = (foodDetails.Meal_Timing || '').toLowerCase();
+            const category = (foodDetails.Enhanced_Category || '').toLowerCase();
+            
+            // Breakfast foods
+            if (mealTiming.includes('breakfast') || 
+                category.includes('breakfast') ||
+                category.includes('cereal') ||
+                category.includes('oat') ||
+                category.includes('pancake') ||
+                category.includes('waffle') ||
+                foodName.toLowerCase().includes('breakfast') ||
+                foodName.toLowerCase().includes('cereal') ||
+                foodName.toLowerCase().includes('oat')) {
+                return 'breakfast';
+            }
+            
+            // Snack foods
+            if (mealTiming.includes('snack') ||
+                category.includes('snack') ||
+                category.includes('nuts') ||
+                category.includes('seed') ||
+                category.includes('cracker') ||
+                category.includes('chip') ||
+                foodName.toLowerCase().includes('snack') ||
+                foodName.toLowerCase().includes('nuts') ||
+                foodName.toLowerCase().includes('seed') ||
+                foodName.toLowerCase().includes('cracker')) {
+                return 'snacks';
+            }
+            
+            // Lunch foods (typically lighter proteins, salads, sandwiches)
+            if (mealTiming.includes('lunch') ||
+                category.includes('salad') ||
+                category.includes('sandwich') ||
+                category.includes('soup') ||
+                foodName.toLowerCase().includes('lunch') ||
+                foodName.toLowerCase().includes('salad') ||
+                foodName.toLowerCase().includes('sandwich') ||
+                foodName.toLowerCase().includes('soup')) {
+                return 'lunch';
+            }
+            
+            // Dinner foods (heavier meals, main proteins)
+            if (mealTiming.includes('dinner') ||
+                category.includes('main') ||
+                category.includes('entree') ||
+                category.includes('steak') ||
+                category.includes('roast') ||
+                foodName.toLowerCase().includes('dinner') ||
+                foodName.toLowerCase().includes('steak') ||
+                foodName.toLowerCase().includes('roast')) {
+                return 'dinner';
+            }
+            
+            // Default categorization based on food type
+            if (category.includes('protein') || category.includes('meat') || category.includes('fish')) {
+                return Math.random() > 0.5 ? 'lunch' : 'dinner';
+            }
+            if (category.includes('fruit') || category.includes('dairy')) {
+                return Math.random() > 0.5 ? 'breakfast' : 'snacks';
+            }
+            if (category.includes('vegetable') || category.includes('grain')) {
+                return Math.random() > 0.5 ? 'lunch' : 'dinner';
+            }
+            
+            // Random assignment for uncategorized foods
+            const mealTypes = ['breakfast', 'lunch', 'dinner', 'snacks'];
+            return mealTypes[Math.floor(Math.random() * mealTypes.length)];
         }
 
         function findMatchingTemplate() {
@@ -501,19 +599,22 @@
                 return;
             }
 
+            // Map the somatotype to template values
+            const mappedSomatotype = mapSomatotype(preferences.somatotype);
+
             // Find matching template
             const template = allTemplates.find(t => 
-                t.somatotype === preferences.somatotype &&
-                t.gender === preferences.gender &&
-                t.goal === preferences.goal &&
-                t.activity_level === preferences.activity &&
-                t.experience_level === preferences.experience &&
-                t.location === preferences.location
+                t.somatotype === mappedSomatotype &&
+                t.gender === preferences.gender.toLowerCase() &&
+                t.goal === preferences.goal.toLowerCase() &&
+                t.activity_level === preferences.activity.toLowerCase() &&
+                t.experience_level === preferences.experience.toLowerCase() &&
+                t.location === preferences.location.toLowerCase()
             );
 
             if (template) {
                 currentTemplate = template;
-                updateTemplateInfo(`✅ Found matching template: ${template.template_id || 'Template Found'}`);
+                updateTemplateInfo(`✅ Found matching template: ${template.template_id || 'Template Found'} (${preferences.somatotype})`);
                 renderMealRecommendations();
             } else {
                 currentTemplate = null;
@@ -559,6 +660,8 @@
             const protein = parseFloat(foodDetails.Protein_g) || 0;
             const carbs = parseFloat(foodDetails.Carbohydrates_g) || 0;
             const fat = parseFloat(foodDetails.Fat_g) || 0;
+            const fiber = parseFloat(foodDetails.Fiber_g) || 0;
+            const sugars = parseFloat(foodDetails.Sugars_g) || 0;
 
             return `
                 <div class="food-item">
@@ -582,6 +685,21 @@
                             <div class="macro-value">${fat.toFixed(1)}g</div>
                         </div>
                     </div>
+                    ${fiber > 0 || sugars > 0 ? `
+                        <div class="fiber-sugar-info" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0;">
+                            <div class="fiber-box" style="text-align: center; padding: 6px; border-radius: 4px; background: #e8f5e8; color: #2e7d32; font-size: 10px;">
+                                <strong>Fiber:</strong> ${fiber.toFixed(1)}g
+                            </div>
+                            <div class="sugar-box" style="text-align: center; padding: 6px; border-radius: 4px; background: #fff3e0; color: #f57c00; font-size: 10px;">
+                                <strong>Sugar:</strong> ${sugars.toFixed(1)}g
+                            </div>
+                        </div>
+                    ` : ''}
+                    ${foodDetails.Meal_Timing ? `
+                        <div style="text-align: center; margin-top: 8px; font-size: 10px; color: #666; font-style: italic;">
+                            🕒 Best timing: ${foodDetails.Meal_Timing.replace(/_/g, ' ')}
+                        </div>
+                    ` : ''}
                 </div>
             `;
         }
@@ -686,11 +804,30 @@
         function renderMealRecommendations() {
             if (!currentTemplate) return;
 
-            // Parse food lists from template
-            const breakfastFoods = parseFoodList(currentTemplate.breakfast_foods);
-            const lunchFoods = parseFoodList(currentTemplate.lunch_foods);
-            const dinnerFoods = parseFoodList(currentTemplate.dinner_foods);
-            const snackFoods = parseFoodList(currentTemplate.snack_foods);
+            // Get all foods from template
+            const allTemplateFoods = [
+                ...parseFoodList(currentTemplate.breakfast_foods),
+                ...parseFoodList(currentTemplate.lunch_foods), 
+                ...parseFoodList(currentTemplate.dinner_foods),
+                ...parseFoodList(currentTemplate.snack_foods)
+            ];
+
+            // Remove duplicates
+            const uniqueFoods = [...new Set(allTemplateFoods)];
+
+            // Organize foods by meal type based on their Enhanced_Category
+            const organizedMeals = {
+                breakfast: [],
+                lunch: [],
+                dinner: [],
+                snacks: []
+            };
+
+            uniqueFoods.forEach(foodName => {
+                const foodDetails = getFoodDetails(foodName);
+                const mealType = categorizeFoodByMealType(foodName, foodDetails);
+                organizedMeals[mealType].push(foodName);
+            });
 
             // Create template details
             const templateDetails = `
@@ -698,9 +835,16 @@
                     <div class="template-id">📋 ${currentTemplate.template_id || 'Diet Template'}</div>
                     <div class="template-stats">
                         Target Calories: ${currentTemplate.total_calories || 'N/A'} | 
-                        Protein: ${currentTemplate.total_protein || 'N/A'}g | 
-                        Carbs: ${currentTemplate.total_carbohydrates || 'N/A'}g | 
-                        Fat: ${currentTemplate.total_fat || 'N/A'}g
+                        Protein: ${currentTemplate.protein_g || 'N/A'}g | 
+                        Carbs: ${currentTemplate.carbs_g || 'N/A'}g | 
+                        Fat: ${currentTemplate.fats_g || 'N/A'}g
+                    </div>
+                    <div style="margin-top: 10px; font-size: 12px; color: #666;">
+                        📊 Total Foods: ${uniqueFoods.length} | 
+                        🌅 Breakfast: ${organizedMeals.breakfast.length} | 
+                        ☀️ Lunch: ${organizedMeals.lunch.length} | 
+                        🌆 Dinner: ${organizedMeals.dinner.length} | 
+                        🍿 Snacks: ${organizedMeals.snacks.length}
                     </div>
                 </div>
             `;
@@ -708,10 +852,10 @@
             // Create meal sections
             const mealsHTML = `
                 <div class="meals-container">
-                    ${createMealSection('breakfast', breakfastFoods, 'breakfast-header')}
-                    ${createMealSection('lunch', lunchFoods, 'lunch-header')}
-                    ${createMealSection('dinner', dinnerFoods, 'dinner-header')}
-                    ${createMealSection('snacks', snackFoods, 'snacks-header')}
+                    ${createMealSection('breakfast', organizedMeals.breakfast, 'breakfast-header')}
+                    ${createMealSection('lunch', organizedMeals.lunch, 'lunch-header')}
+                    ${createMealSection('dinner', organizedMeals.dinner, 'dinner-header')}
+                    ${createMealSection('snacks', organizedMeals.snacks, 'snacks-header')}
                 </div>
             `;
 
