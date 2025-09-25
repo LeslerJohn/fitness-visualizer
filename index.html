@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Updated Exercise Recommendation Visualizer</title>
+    <title>Complete Exercise Template Visualizer - GitHub Pages Ready</title>
     <style>
         * {
             margin: 0;
@@ -50,49 +50,60 @@
             margin-bottom: 30px;
         }
 
-        .filter-section {
-            display: flex;
-            flex-wrap: wrap;
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
-            align-items: center;
+            margin-bottom: 15px;
         }
 
         .filter-group {
             display: flex;
             flex-direction: column;
-            gap: 5px;
         }
 
         .filter-group label {
-            font-weight: 600;
-            color: #555;
-            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-size: 14px;
         }
 
-        select, input {
-            padding: 8px 12px;
-            border: 2px solid #e1e5e9;
+        .filter-group select {
+            padding: 10px;
+            border: 2px solid #ddd;
             border-radius: 8px;
-            font-size: 0.9rem;
+            font-size: 14px;
             transition: border-color 0.3s;
         }
 
-        select:focus, input:focus {
-            outline: none;
+        .filter-group select:focus {
             border-color: #667eea;
+            outline: none;
         }
 
-        .template-grid {
+        .stats-bar {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+
+        .templates-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
             gap: 25px;
         }
 
         .template-card {
             background: white;
             border-radius: 15px;
+            padding: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
@@ -101,177 +112,171 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.15);
         }
 
-        .template-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .template-id {
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            padding: 20px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: inline-block;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .template-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 8px;
+        .template-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
-        .template-subtitle {
-            opacity: 0.9;
-            font-size: 0.95rem;
+        .somatotype-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .calories-display {
+            font-size: 28px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .meta-info {
+            margin: 10px 0;
+            color: #7f8c8d;
+            font-size: 13px;
             line-height: 1.4;
         }
 
-        .template-body {
-            padding: 25px;
-        }
-
-        .template-details {
+        .macros-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 25px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0;
         }
 
-        .detail-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
+        .macro-box {
+            text-align: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
         }
 
-        .detail-label {
-            font-weight: 600;
-            color: #666;
+        .macro-label {
+            font-size: 11px;
+            color: #6c757d;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 4px;
         }
 
-        .detail-value {
-            color: #333;
-            font-weight: 500;
+        .macro-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
         }
 
-        .exercises-section {
-            margin-top: 25px;
+        .exercise-section {
+            margin: 20px 0;
         }
 
-        .exercise-category {
-            margin-bottom: 25px;
-        }
-
-        .category-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #667eea;
-            margin-bottom: 15px;
+        .exercise-section h4 {
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+            font-size: 14px;
+            font-weight: bold;
             padding-bottom: 8px;
             border-bottom: 2px solid #667eea;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
-        .category-icon {
-            width: 24px;
-            height: 24px;
-            background: #667eea;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
-
-        .exercise-grid {
+        .exercises-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 12px;
         }
 
         .exercise-item {
             background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 8px;
             text-align: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: 2px solid transparent;
+            transition: all 0.3s;
+            cursor: pointer;
         }
 
         .exercise-item:hover {
-            transform: scale(1.02);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             border-color: #667eea;
         }
 
-        .exercise-gif {
-            width: 100%;
-            height: 150px;
-            border-radius: 8px;
-            margin-bottom: 10px;
+        .exercise-image {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 8px;
             background: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #6c757d;
-            font-size: 0.8rem;
         }
 
         .exercise-name {
+            font-size: 10px;
+            color: #495057;
             font-weight: 600;
-            color: #333;
-            font-size: 0.9rem;
-            margin-bottom: 5px;
+            line-height: 1.2;
         }
 
-        .exercise-details {
-            font-size: 0.8rem;
-            color: #666;
+        .description-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            color: #495057;
+            line-height: 1.4;
         }
 
-        .loading {
+        .loading, .no-results {
             text-align: center;
-            padding: 40px;
+            padding: 60px 20px;
             color: white;
-            font-size: 1.2rem;
+            font-size: 18px;
         }
 
         .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px;
+            background: #e74c3c;
+            color: white;
+            padding: 20px;
             border-radius: 8px;
-            margin: 10px 0;
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-            font-style: italic;
-        }
-
-        .stats {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            margin: 20px 0;
             text-align: center;
         }
 
         @media (max-width: 768px) {
-            .template-grid {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .templates-grid {
                 grid-template-columns: 1fr;
             }
             
-            .template-details {
-                grid-template-columns: 1fr;
-            }
-            
-            .filter-section {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .exercise-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            .filter-row {
+                grid-template-columns: 1fr 1fr;
             }
         }
     </style>
@@ -279,401 +284,352 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏋️ Updated Exercise Recommendation Visualizer</h1>
-            <p>1080 Comprehensive Somatotype-Based Diet and Fitness Templates with Exercise GIF Demonstrations</p>
+            <h1>🏋️‍♂️ Exercise Template Visualizer</h1>
+            <p>Complete Diet & Exercise Templates for All Somatotypes</p>
+            <p><strong>✅ Live Data Loading • 📊 All 1080 Templates • 🎯 Proper Exercise IDs & GIFs</strong></p>
         </div>
 
         <div class="controls">
-            <div class="filter-section">
+            <div class="filter-row">
                 <div class="filter-group">
-                    <label for="somatotypeFilter">Somatotype:</label>
-                    <select id="somatotypeFilter">
+                    <label for="somatotype-filter">🧬 Somatotype:</label>
+                    <select id="somatotype-filter">
                         <option value="">All Somatotypes</option>
                         <option value="ectomorph">Ectomorph</option>
                         <option value="mesomorph">Mesomorph</option>
                         <option value="endomorph">Endomorph</option>
-                        <option value="ecto_endo">Ecto-Endo (Hybrid)</option>
-                        <option value="meso_ecto">Meso-Ecto (Hybrid)</option>
-                        <option value="endo_meso">Endo-Meso (Hybrid)</option>
+                        <option value="ecto_endo">Ecto-Endomorph</option>
+                        <option value="meso_ecto">Meso-Ectomorph</option>
+                        <option value="endo_meso">Endo-Mesomorph</option>
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label for="genderFilter">Gender:</label>
-                    <select id="genderFilter">
+                    <label for="gender-filter">👤 Gender:</label>
+                    <select id="gender-filter">
                         <option value="">All Genders</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label for="goalFilter">Goal:</label>
-                    <select id="goalFilter">
+                    <label for="goal-filter">🎯 Goal:</label>
+                    <select id="goal-filter">
                         <option value="">All Goals</option>
                         <option value="weight_loss">Weight Loss</option>
-                        <option value="maintenance">Maintenance</option>
                         <option value="weight_gain">Weight Gain</option>
+                        <option value="maintenance">Maintenance</option>
                     </select>
                 </div>
+            </div>
+            <div class="filter-row">
                 <div class="filter-group">
-                    <label for="exerciseTypeFilter">Exercise Type:</label>
-                    <select id="exerciseTypeFilter">
-                        <option value="">All Types</option>
-                        <option value="gym">Gym</option>
-                        <option value="bodyweight">Bodyweight</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="activityFilter">Activity Level:</label>
-                    <select id="activityFilter">
+                    <label for="activity-filter">⚡ Activity Level:</label>
+                    <select id="activity-filter">
                         <option value="">All Activity Levels</option>
                         <option value="sedentary">Sedentary</option>
                         <option value="lightly_active">Lightly Active</option>
                         <option value="moderately_active">Moderately Active</option>
                         <option value="very_active">Very Active</option>
-                        <option value="extra_active">Extra Active</option>
+                        <option value="extremely_active">Extremely Active</option>
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label for="complexityFilter">Complexity:</label>
-                    <select id="complexityFilter">
-                        <option value="">All Levels</option>
+                    <label for="complexity-filter">📊 Exercise Complexity:</label>
+                    <select id="complexity-filter">
+                        <option value="">All Complexity</option>
                         <option value="beginner">Beginner</option>
                         <option value="intermediate">Intermediate</option>
-                        <option value="hard">Hard/Advanced</option>
+                        <option value="hard">Advanced</option>
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label for="limitFilter">Display Limit:</label>
-                    <select id="limitFilter">
-                        <option value="10">10 Templates</option>
-                        <option value="20">20 Templates</option>
-                        <option value="50">50 Templates</option>
-                        <option value="100">100 Templates</option>
-                        <option value="all">All Templates</option>
+                    <label for="type-filter">🏃‍♂️ Exercise Type:</label>
+                    <select id="type-filter">
+                        <option value="">All Types</option>
+                        <option value="gym">Gym</option>
+                        <option value="bodyweight">Bodyweight</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <div class="stats" id="statsContainer"></div>
-        <div class="loading" id="loadingIndicator">Loading exercise data...</div>
-        <div class="template-grid" id="templateContainer"></div>
+        <div class="stats-bar" id="stats-bar">
+            Loading templates...
+        </div>
+
+        <div class="templates-grid" id="templates-container">
+            <div class="loading">🔄 Loading exercise templates...</div>
+        </div>
     </div>
 
     <script>
+        // Global variables to store loaded data
+        let exerciseDatabase = {};
         let allTemplates = [];
-        let gymExercises = {};
-        let bodyweightExercises = {};
+        let filteredTemplates = [];
 
-        // Load data
+        // Load data from actual files
         async function loadData() {
             try {
-                // Load CSV data
+                console.log('🔄 Loading data from files...');
+                
+                // Load CSV templates
                 const csvResponse = await fetch('./fixed_comprehensive_diet_templates_with_proper_exercise_ids.csv');
+                if (!csvResponse.ok) {
+                    throw new Error(`Failed to load CSV: ${csvResponse.status} ${csvResponse.statusText}`);
+                }
                 const csvText = await csvResponse.text();
+                console.log('✅ CSV loaded successfully');
                 
-                // Load exercise data
-                const exerciseResponse = await fetch('./data/datasets/fitness/data/exercises.json');
+                // Load exercise database
+                const exerciseResponse = await fetch('./exercises.json');
+                if (!exerciseResponse.ok) {
+                    throw new Error(`Failed to load exercises: ${exerciseResponse.status} ${exerciseResponse.statusText}`);
+                }
                 const allExerciseData = await exerciseResponse.json();
-
-                // Create exercise lookups (all exercises are now in one file)
+                console.log('✅ Exercise database loaded successfully:', allExerciseData.length, 'exercises');
+                
+                // Convert exercise array to lookup object
+                exerciseDatabase = {};
                 allExerciseData.forEach(exercise => {
-                    gymExercises[exercise.exerciseId] = exercise;
-                    // For bodyweight exercises, add to both lookups for compatibility
-                    if (exercise.equipments && exercise.equipments.includes('body weight')) {
-                        bodyweightExercises[exercise.exerciseId] = exercise;
-                    }
+                    exerciseDatabase[exercise.exerciseId] = exercise;
                 });
-
-                // Parse CSV
-                allTemplates = parseCSV(csvText);
+                console.log('✅ Exercise database indexed by ID');
                 
-                // Remove duplicates based on template_id
-                allTemplates = removeDuplicates(allTemplates);
+                // Parse CSV data
+                allTemplates = parseCSVData(csvText);
+                filteredTemplates = [...allTemplates];
+                console.log('✅ Templates parsed:', allTemplates.length);
                 
-                renderTemplates(allTemplates);
-                updateStats(allTemplates);
+                // Initialize the app
+                renderTemplates();
+                updateStats();
+                setupEventListeners();
                 
-                document.getElementById('loadingIndicator').style.display = 'none';
             } catch (error) {
-                console.error('Error loading data:', error);
-                document.getElementById('loadingIndicator').innerHTML = 
-                    '<div class="error">Error loading data. Please ensure all files are in the correct location.<br>Error: ' + error.message + '</div>';
-            }
-        }
-
-        function parseCSV(text) {
-            const lines = text.trim().split('\n');
-            const headers = lines[0].split(',');
-            const templates = [];
-
-            for (let i = 1; i < lines.length; i++) {
-                const values = parseCSVLine(lines[i]);
-                const template = {};
-                
-                headers.forEach((header, index) => {
-                    template[header] = values[index] || '';
-                });
-                
-                templates.push(template);
-            }
-
-            return templates;
-        }
-
-        function parseCSVLine(line) {
-            const values = [];
-            let current = '';
-            let inQuotes = false;
-            
-            for (let i = 0; i < line.length; i++) {
-                const char = line[i];
-                
-                if (char === '"') {
-                    inQuotes = !inQuotes;
-                } else if (char === ',' && !inQuotes) {
-                    values.push(current.trim());
-                    current = '';
-                } else {
-                    current += char;
-                }
-            }
-            
-            values.push(current.trim());
-            return values;
-        }
-
-        function removeDuplicates(templates) {
-            const seen = new Set();
-            return templates.filter(template => {
-                // Use template_id as the primary key for uniqueness
-                const key = template.template_id || `${template.somatotype}-${template.gender}-${template.goal}-${template.activity_level}-${template.exercise_complexity}-${template.exercise_type}`;
-                if (seen.has(key)) {
-                    return false;
-                }
-                seen.add(key);
-                return true;
-            });
-        }
-
-        function getExerciseDetails(exerciseId, isBodyweight = false) {
-            // All exercises are now in the gymExercises lookup
-            const exercise = gymExercises[exerciseId] || bodyweightExercises[exerciseId];
-            return exercise || { 
-                name: `Exercise ${exerciseId}`, 
-                gifUrl: '', 
-                targetMuscles: [], 
-                equipments: [],
-                bodyParts: []
-            };
-        }
-
-        function renderExerciseCategory(title, exerciseIds, isBodyweight = false, icon = 'E') {
-            if (!exerciseIds || exerciseIds.trim() === '') return '';
-
-            const ids = exerciseIds.split(',').map(id => id.trim()).filter(id => id);
-            if (ids.length === 0) return '';
-
-            const exerciseItems = ids.map(id => {
-                const exercise = getExerciseDetails(id, isBodyweight);
-                return `
-                    <div class="exercise-item">
-                        <div class="exercise-gif">
-                            ${exercise.gifUrl ? 
-                                `<img src="${exercise.gifUrl}" alt="${exercise.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='GIF not available'">` : 
-                                'GIF not available'
-                            }
-                        </div>
-                        <div class="exercise-name">${exercise.name}</div>
-                        <div class="exercise-details">
-                            <div>Target: ${Array.isArray(exercise.targetMuscles) ? exercise.targetMuscles.join(', ') : 'N/A'}</div>
-                            <div>Equipment: ${Array.isArray(exercise.equipments) ? exercise.equipments.join(', ') : 'N/A'}</div>
-                        </div>
+                console.error('❌ Error loading data:', error);
+                document.getElementById('templates-container').innerHTML = `
+                    <div class="error">
+                        ❌ Error loading data: ${error.message}
+                        <br><br>Please ensure all files are in the correct location:
+                        <br>• fixed_comprehensive_diet_templates_with_proper_exercise_ids.csv
+                        <br>• data/datasets/fitness/data/exercises.json
                     </div>
                 `;
-            }).join('');
+            }
+        }
+
+        // Utility Functions
+        function parseCSVData(csvString) {
+            const lines = csvString.trim().split('\n');
+            const headers = lines[0].split(',');
+            const data = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = [];
+                let currentValue = '';
+                let insideQuotes = false;
+                
+                for (let j = 0; j < lines[i].length; j++) {
+                    const char = lines[i][j];
+                    if (char === '"' && (j === 0 || lines[i][j-1] === ',')) {
+                        insideQuotes = true;
+                    } else if (char === '"' && (j === lines[i].length - 1 || lines[i][j+1] === ',')) {
+                        insideQuotes = false;
+                    } else if (char === ',' && !insideQuotes) {
+                        values.push(currentValue.trim());
+                        currentValue = '';
+                    } else {
+                        currentValue += char;
+                    }
+                }
+                values.push(currentValue.trim());
+                
+                const row = {};
+                headers.forEach((header, index) => {
+                    row[header] = values[index] || '';
+                });
+                data.push(row);
+            }
+            return data;
+        }
+
+        function formatText(text) {
+            return text.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
+
+        function getSomatotypeBadgeColor(somatotype) {
+            const colors = {
+                'ectomorph': '#3498db',
+                'mesomorph': '#e74c3c', 
+                'endomorph': '#f39c12',
+                'ecto_endo': '#9b59b6',
+                'meso_ecto': '#1abc9c',
+                'endo_meso': '#e67e22'
+            };
+            return colors[somatotype] || '#95a5a6';
+        }
+
+        function createExerciseElement(exerciseId) {
+            const exercise = exerciseDatabase[exerciseId];
+            if (!exercise) {
+                console.warn('Exercise not found:', exerciseId);
+                return `
+                    <div class="exercise-item">
+                        <div class="exercise-image" style="background: #ddd; display: flex; align-items: center; justify-content: center; color: #666; font-size: 10px;">
+                            Not Found
+                        </div>
+                        <div class="exercise-name">${exerciseId}</div>
+                    </div>
+                `;
+            }
 
             return `
-                <div class="exercise-category">
-                    <div class="category-title">
-                        <div class="category-icon">${icon}</div>
-                        ${title} (${ids.length} exercises)
-                    </div>
-                    <div class="exercise-grid">
-                        ${exerciseItems}
-                    </div>
+                <div class="exercise-item">
+                    <img src="${exercise.gifUrl}" alt="${exercise.name}" class="exercise-image" loading="lazy" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'; this.nextElementSibling.style.alignItems='center'; this.nextElementSibling.style.justifyContent='center'; this.nextElementSibling.style.background='#ddd'; this.nextElementSibling.style.color='#666'; this.nextElementSibling.style.fontSize='10px'; this.nextElementSibling.innerHTML='No GIF';">
+                    <div style="display:none; width: 70px; height: 70px; border-radius: 6px; margin-bottom: 8px;">No GIF</div>
+                    <div class="exercise-name">${exercise.name}</div>
                 </div>
             `;
         }
 
-        function renderTemplate(template) {
-            const isGymType = template.exercise_type === 'gym';
-            
-            let exercisesHTML = '';
-            
-            if (isGymType) {
-                exercisesHTML = `
-                    ${renderExerciseCategory('Push Exercises (Chest, Triceps, Shoulders)', template.push_exercises, false, 'P')}
-                    ${renderExerciseCategory('Pull Exercises (Back, Biceps)', template.pull_exercises, false, 'Pu')}
-                    ${renderExerciseCategory('Legs Exercises (Legs, Traps)', template.legs_exercises, false, 'L')}
-                `;
-            } else {
-                exercisesHTML = renderExerciseCategory('Bodyweight Exercises', template.bodyweight_exercises, true, 'B');
-            }
+        function createTemplateCard(template) {
+            const pushExercises = template.push_exercises ? template.push_exercises.split(',').map(e => e.trim()) : [];
+            const pullExercises = template.pull_exercises ? template.pull_exercises.split(',').map(e => e.trim()) : [];
+            const legExercises = template.legs_exercises ? template.legs_exercises.split(',').map(e => e.trim()) : [];
+            const bodyweightExercises = template.bodyweight_exercises ? template.bodyweight_exercises.split(',').map(e => e.trim()) : [];
 
-            if (!exercisesHTML.trim()) {
-                exercisesHTML = '<div class="no-results">No exercises found for this template.</div>';
-            }
-
-            // Format somatotype display name
-            const somatotypeDisplay = template.somatotype.replace('_', '-').split('-').map(part => 
-                part.charAt(0).toUpperCase() + part.slice(1)
-            ).join('-');
+            const somatotypeBadgeColor = getSomatotypeBadgeColor(template.somatotype);
 
             return `
                 <div class="template-card">
+                    <div class="template-id">${template.template_id}</div>
+                    
                     <div class="template-header">
-                        <div class="template-title">
-                            ${somatotypeDisplay} - ${template.gender.charAt(0).toUpperCase() + template.gender.slice(1)}
+                        <div>
+                            <div class="somatotype-badge" style="background-color: ${somatotypeBadgeColor};">
+                                ${formatText(template.somatotype)}
+                            </div>
+                            <div class="meta-info">
+                                <strong>${template.gender?.toUpperCase()}</strong> • ${formatText(template.goal)}
+                                <br>${formatText(template.activity_level)} • ${formatText(template.exercise_complexity)} • ${formatText(template.exercise_type)}
+                            </div>
                         </div>
-                        <div class="template-subtitle">
-                            Template ID: ${template.template_id || 'N/A'}<br>
-                            ${template.goal.replace('_', ' ').charAt(0).toUpperCase() + template.goal.replace('_', ' ').slice(1)} • 
-                            ${template.exercise_complexity.charAt(0).toUpperCase() + template.exercise_complexity.slice(1)} • 
-                            ${template.exercise_type.charAt(0).toUpperCase() + template.exercise_type.slice(1)}
+                        <div class="calories-display">${template.total_calories}</div>
+                    </div>
+
+                    <div class="macros-grid">
+                        <div class="macro-box">
+                            <div class="macro-label">Protein</div>
+                            <div class="macro-value">${template.protein_g}g</div>
+                        </div>
+                        <div class="macro-box">
+                            <div class="macro-label">Carbs</div>
+                            <div class="macro-value">${template.carbs_g}g</div>
+                        </div>
+                        <div class="macro-box">
+                            <div class="macro-label">Fats</div>
+                            <div class="macro-value">${template.fats_g}g</div>
                         </div>
                     </div>
-                    <div class="template-body">
-                        <div class="template-details">
-                            <div class="detail-item">
-                                <span class="detail-label">Activity Level:</span>
-                                <span class="detail-value">${template.activity_level.replace('_', ' ')}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Total Calories:</span>
-                                <span class="detail-value">${template.total_calories}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Protein:</span>
-                                <span class="detail-value">${template.protein_g}g (${template.protein_pct}%)</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Carbs:</span>
-                                <span class="detail-value">${template.carbs_g}g (${template.carbs_pct}%)</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Fats:</span>
-                                <span class="detail-value">${template.fats_g}g (${template.fats_pct}%)</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Training Split:</span>
-                                <span class="detail-value">${template.fitness_split_strength}x Strength, ${template.fitness_split_cardio}x Cardio</span>
+
+                    ${pushExercises.length > 0 ? `
+                        <div class="exercise-section">
+                            <h4>💪 Push Exercises (Chest, Shoulders, Triceps)</h4>
+                            <div class="exercises-grid">
+                                ${pushExercises.map(createExerciseElement).join('')}
                             </div>
                         </div>
-                        
-                        <div class="exercises-section">
-                            ${exercisesHTML}
+                    ` : ''}
+
+                    ${pullExercises.length > 0 ? `
+                        <div class="exercise-section">
+                            <h4>🔙 Pull Exercises (Back, Biceps)</h4>
+                            <div class="exercises-grid">
+                                ${pullExercises.map(createExerciseElement).join('')}
+                            </div>
                         </div>
+                    ` : ''}
+
+                    ${legExercises.length > 0 ? `
+                        <div class="exercise-section">
+                            <h4>🦵 Leg Exercises (Legs, Traps)</h4>
+                            <div class="exercises-grid">
+                                ${legExercises.map(createExerciseElement).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    ${bodyweightExercises.length > 0 ? `
+                        <div class="exercise-section">
+                            <h4>🏃‍♂️ Bodyweight Exercises</h4>
+                            <div class="exercises-grid">
+                                ${bodyweightExercises.map(createExerciseElement).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <div class="description-box">
+                        <strong>Somatotype Description:</strong> ${template.description || 'No description available'}
                     </div>
                 </div>
             `;
         }
 
-        function renderTemplates(templates) {
-            const container = document.getElementById('templateContainer');
-            const limit = document.getElementById('limitFilter').value;
-            const displayTemplates = limit === 'all' ? templates : templates.slice(0, parseInt(limit));
+        function applyFilters() {
+            const filters = {
+                somatotype: document.getElementById('somatotype-filter').value,
+                gender: document.getElementById('gender-filter').value,
+                goal: document.getElementById('goal-filter').value,
+                activity: document.getElementById('activity-filter').value,
+                complexity: document.getElementById('complexity-filter').value,
+                type: document.getElementById('type-filter').value
+            };
+
+            filteredTemplates = allTemplates.filter(template => {
+                return (!filters.somatotype || template.somatotype === filters.somatotype) &&
+                       (!filters.gender || template.gender === filters.gender) &&
+                       (!filters.goal || template.goal === filters.goal) &&
+                       (!filters.activity || template.activity_level === filters.activity) &&
+                       (!filters.complexity || template.exercise_complexity === filters.complexity) &&
+                       (!filters.type || template.exercise_type === filters.type);
+            });
+
+            renderTemplates();
+            updateStats();
+        }
+
+        function renderTemplates() {
+            const container = document.getElementById('templates-container');
             
-            if (displayTemplates.length === 0) {
-                container.innerHTML = '<div class="no-results">No templates match the current filters.</div>';
+            if (filteredTemplates.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        🔍 No templates found matching your filters.<br>
+                        Try adjusting your filter criteria.
+                    </div>
+                `;
                 return;
             }
 
-            container.innerHTML = displayTemplates.map(renderTemplate).join('');
+            container.innerHTML = filteredTemplates.map(createTemplateCard).join('');
         }
 
-        function filterTemplates() {
-            const somatotype = document.getElementById('somatotypeFilter').value;
-            const gender = document.getElementById('genderFilter').value;
-            const goal = document.getElementById('goalFilter').value;
-            const exerciseType = document.getElementById('exerciseTypeFilter').value;
-            const activity = document.getElementById('activityFilter').value;
-            const complexity = document.getElementById('complexityFilter').value;
-
-            const filtered = allTemplates.filter(template => {
-                return (!somatotype || template.somatotype === somatotype) &&
-                       (!gender || template.gender === gender) &&
-                       (!goal || template.goal === goal) &&
-                       (!exerciseType || template.exercise_type === exerciseType) &&
-                       (!activity || template.activity_level === activity) &&
-                       (!complexity || template.exercise_complexity === complexity);
-            });
-
-            renderTemplates(filtered);
-            updateStats(filtered);
+        function updateStats() {
+            const stats = document.getElementById('stats-bar');
+            stats.textContent = `📊 Showing ${filteredTemplates.length} of ${allTemplates.length} templates`;
         }
 
-        function updateStats(templates) {
-            const stats = document.getElementById('statsContainer');
-            const totalExercises = templates.reduce((count, template) => {
-                const isGym = template.exercise_type === 'gym';
-                if (isGym) {
-                    const pushCount = template.push_exercises ? template.push_exercises.split(',').filter(id => id.trim()).length : 0;
-                    const pullCount = template.pull_exercises ? template.pull_exercises.split(',').filter(id => id.trim()).length : 0;
-                    const legsCount = template.legs_exercises ? template.legs_exercises.split(',').filter(id => id.trim()).length : 0;
-                    return count + pushCount + pullCount + legsCount;
-                } else {
-                    const bodyweightCount = template.bodyweight_exercises ? template.bodyweight_exercises.split(',').filter(id => id.trim()).length : 0;
-                    return count + bodyweightCount;
-                }
-            }, 0);
-
-            // Count somatotypes
-            const somatotypeCounts = {};
-            templates.forEach(template => {
-                somatotypeCounts[template.somatotype] = (somatotypeCounts[template.somatotype] || 0) + 1;
+        function setupEventListeners() {
+            const filterIds = ['somatotype-filter', 'gender-filter', 'goal-filter', 'activity-filter', 'complexity-filter', 'type-filter'];
+            filterIds.forEach(id => {
+                document.getElementById(id).addEventListener('change', applyFilters);
             });
-
-            const somatotypeStats = Object.entries(somatotypeCounts)
-                .map(([type, count]) => `${type}: ${count}`)
-                .join(' • ');
-
-            stats.innerHTML = `
-                <strong>Showing ${templates.length} templates</strong> • 
-                Total exercises displayed: ${totalExercises} • 
-                Total exercises in database: ${Object.keys(gymExercises).length}<br>
-                <small>Distribution by somatotype: ${somatotypeStats}</small>
-            `;
         }
 
-        // Event listeners
-        document.getElementById('somatotypeFilter').addEventListener('change', filterTemplates);
-        document.getElementById('genderFilter').addEventListener('change', filterTemplates);
-        document.getElementById('goalFilter').addEventListener('change', filterTemplates);
-        document.getElementById('exerciseTypeFilter').addEventListener('change', filterTemplates);
-        document.getElementById('activityFilter').addEventListener('change', filterTemplates);
-        document.getElementById('complexityFilter').addEventListener('change', filterTemplates);
-        document.getElementById('limitFilter').addEventListener('change', () => {
-            const filtered = allTemplates.filter(template => {
-                const somatotype = document.getElementById('somatotypeFilter').value;
-                const gender = document.getElementById('genderFilter').value;
-                const goal = document.getElementById('goalFilter').value;
-                const exerciseType = document.getElementById('exerciseTypeFilter').value;
-                const activity = document.getElementById('activityFilter').value;
-                const complexity = document.getElementById('complexityFilter').value;
-
-                return (!somatotype || template.somatotype === somatotype) &&
-                       (!gender || template.gender === gender) &&
-                       (!goal || template.goal === goal) &&
-                       (!exerciseType || template.exercise_type === exerciseType) &&
-                       (!activity || template.activity_level === activity) &&
-                       (!complexity || template.exercise_complexity === complexity);
-            });
-            renderTemplates(filtered);
-        });
-
-        // Initialize
-        loadData();
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', loadData);
     </script>
 </body>
 </html>
