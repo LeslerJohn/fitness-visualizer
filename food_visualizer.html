@@ -411,7 +411,7 @@
                 console.log('✅ Templates loaded');
                 
                 // Load food database
-                const foodResponse = await fetch('./data/datasets/diet/fndds_processed/optimized_diet_recommendation_database.csv');
+                const foodResponse = await fetch('./optimized_diet_recommendation_database.csv');
                 if (!foodResponse.ok) {
                     throw new Error(`Failed to load food database: ${foodResponse.status}`);
                 }
@@ -436,7 +436,7 @@
                         ❌ Error loading data: ${error.message}
                         <br><br>Please ensure these files exist:
                         <br>• fixed_comprehensive_diet_templates_with_proper_exercise_ids.csv
-                        <br>• data/datasets/diet/fndds_processed/optimized_diet_recommendation_database.csv
+                        <br>• optimized_diet_recommendation_database.csv
                     </div>
                 `;
             }
