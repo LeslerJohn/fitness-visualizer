@@ -403,7 +403,7 @@
                 console.log('🔄 Loading food database and templates...');
                 
                 // Load food database
-                const foodResponse = await fetch('./data/datasets/diet/fndds_processed/optimized_diet_recommendation_database.csv');
+                const foodResponse = await fetch('./optimized_diet_recommendation_database.csv');
                 if (!foodResponse.ok) {
                     throw new Error(`Failed to load food database: ${foodResponse.status} ${foodResponse.statusText}`);
                 }
@@ -436,7 +436,7 @@
                     <div class="error">
                         ❌ Error loading data: ${error.message}
                         <br><br>Please ensure all files are in the correct location:
-                        <br>• data/datasets/diet/fndds_processed/optimized_diet_recommendation_database.csv
+                        <br>• optimized_diet_recommendation_database.csv
                         <br>• fixed_comprehensive_diet_templates_with_proper_exercise_ids.csv
                     </div>
                 `;
