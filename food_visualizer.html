@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Database Visualizer - Diet Recommendations</title>
+    <title>Meal-Based Food Recommendations - Diet Templates</title>
     <style>
         * {
             margin: 0;
@@ -20,7 +20,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -44,82 +44,104 @@
 
         .controls {
             background: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             margin-bottom: 30px;
         }
 
-        .filter-row {
+        .preference-selector {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
-        .filter-group {
+        .preference-group {
             display: flex;
             flex-direction: column;
         }
 
-        .filter-group label {
+        .preference-group label {
             font-weight: bold;
             margin-bottom: 8px;
             color: #2c3e50;
             font-size: 14px;
         }
 
-        .filter-group select, .filter-group input {
-            padding: 10px;
+        .preference-group select {
+            padding: 12px;
             border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 14px;
             transition: border-color 0.3s;
+            background: white;
         }
 
-        .filter-group select:focus, .filter-group input:focus {
+        .preference-group select:focus {
             border-color: #2ecc71;
             outline: none;
         }
 
-        .search-box {
-            grid-column: 1 / -1;
-            margin-top: 10px;
-        }
-
-        .stats-bar {
-            background: rgba(255, 255, 255, 0.9);
+        .template-info {
+            background: #f8f9fa;
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
             text-align: center;
-            margin-bottom: 20px;
             font-weight: bold;
-            font-size: 18px;
             color: #2c3e50;
         }
 
-        .foods-grid {
+        .meals-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
         }
 
-        .food-card {
+        .meal-section {
             background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            border-left: 5px solid #2ecc71;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
         }
 
-        .food-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        .meal-header {
+            padding: 20px;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .breakfast-header { background: linear-gradient(135deg, #ff9800, #f57c00); }
+        .lunch-header { background: linear-gradient(135deg, #2196f3, #1976d2); }
+        .dinner-header { background: linear-gradient(135deg, #9c27b0, #7b1fa2); }
+        .snacks-header { background: linear-gradient(135deg, #4caf50, #388e3c); }
+
+        .meal-foods {
+            padding: 20px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .food-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #2ecc71;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .food-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
         .food-name {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
             color: #2c3e50;
             margin-bottom: 10px;
@@ -129,130 +151,100 @@
         .food-category {
             background: #3498db;
             color: white;
-            padding: 4px 8px;
+            padding: 3px 8px;
             border-radius: 12px;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
             text-transform: uppercase;
             display: inline-block;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
-        .macros-grid {
+        .macros-display {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .macro-box {
-            text-align: center;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border: 1px solid #e9ecef;
-        }
-
-        .macro-label {
-            font-size: 10px;
-            color: #6c757d;
-            text-transform: uppercase;
-            font-weight: bold;
-            margin-bottom: 3px;
-        }
-
-        .macro-value {
-            font-size: 14px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        .calories-display {
-            text-align: center;
-            background: #e8f5e8;
-            padding: 8px;
-            border-radius: 8px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
             margin: 10px 0;
         }
 
-        .calories-label {
-            font-size: 10px;
-            color: #27ae60;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        .calories-value {
-            font-size: 18px;
-            font-weight: bold;
-            color: #27ae60;
-        }
-
-        .scores-section {
-            margin: 15px 0;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .scores-title {
-            font-size: 12px;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 8px;
+        .macro-item {
             text-align: center;
-        }
-
-        .scores-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 5px;
-        }
-
-        .score-item {
-            text-align: center;
-            padding: 5px;
-            border-radius: 4px;
+            padding: 8px;
+            border-radius: 6px;
             font-size: 11px;
         }
 
-        .goal-score {
+        .calories-macro {
+            background: #e8f5e8;
+            color: #27ae60;
+        }
+
+        .protein-macro {
             background: #e3f2fd;
             color: #1976d2;
         }
 
-        .somatotype-score {
+        .carbs-macro {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .fat-macro {
             background: #f3e5f5;
             color: #7b1fa2;
         }
 
-        .quality-info {
-            margin-top: 15px;
-            padding: 8px;
-            background: #fff3e0;
-            border-radius: 6px;
-            border-left: 3px solid #ff9800;
+        .macro-label {
+            font-weight: bold;
+            font-size: 9px;
+            text-transform: uppercase;
         }
 
-        .quality-label {
+        .macro-value {
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        .meal-summary {
+            background: #e8f5e8;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .summary-title {
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .summary-macros {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .summary-macro {
+            text-align: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #27ae60;
+        }
+
+        .summary-macro-label {
             font-size: 10px;
-            color: #ef6c00;
+            color: #27ae60;
             font-weight: bold;
             text-transform: uppercase;
         }
 
-        .quality-value {
-            font-size: 12px;
-            color: #e65100;
+        .summary-macro-value {
+            font-size: 16px;
             font-weight: bold;
-        }
-
-        .meal-timing {
-            margin-top: 10px;
-            font-size: 11px;
-            color: #666;
-            font-style: italic;
-            text-align: center;
+            color: #2c3e50;
         }
 
         .loading, .no-results {
@@ -271,39 +263,24 @@
             text-align: center;
         }
 
-        .recommendation-badge {
-            background: #27ae60;
-            color: white;
-            padding: 3px 6px;
+        .template-details {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
             border-radius: 10px;
-            font-size: 9px;
-            font-weight: bold;
-            margin: 2px;
-            display: inline-block;
-        }
-
-        .fiber-sugar-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin: 10px 0;
-        }
-
-        .fiber-box, .sugar-box {
+            margin-bottom: 20px;
             text-align: center;
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 11px;
         }
 
-        .fiber-box {
-            background: #e8f5e8;
-            color: #2e7d32;
+        .template-id {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
         }
 
-        .sugar-box {
-            background: #fff3e0;
-            color: #f57c00;
+        .template-stats {
+            font-size: 14px;
+            color: #666;
         }
 
         @media (max-width: 768px) {
@@ -315,12 +292,20 @@
                 font-size: 2rem;
             }
             
-            .foods-grid {
+            .meals-container {
                 grid-template-columns: 1fr;
             }
             
-            .filter-row {
+            .preference-selector {
                 grid-template-columns: 1fr;
+            }
+
+            .macros-display {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .summary-macros {
+                grid-template-columns: 1fr 1fr;
             }
         }
     </style>
@@ -328,122 +313,132 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🥗 Food Database Visualizer</h1>
-            <p>Comprehensive Diet Recommendations Database</p>
-            <p><strong>✅ Live Data Loading • 📊 5000+ Foods • 🎯 Macro & Score Analysis</strong></p>
+            <h1>🍽️ Meal-Based Food Recommendations</h1>
+            <p>Personalized Diet Templates by User Preference</p>
+            <p><strong>✅ Template-Based • 🎯 Macro Tracking • 📊 Meal Organization</strong></p>
         </div>
 
         <div class="controls">
-            <div class="filter-row">
-                <div class="filter-group">
-                    <label for="category-filter">🍎 Food Category:</label>
-                    <select id="category-filter">
-                        <option value="">All Categories</option>
+            <div class="preference-selector">
+                <div class="preference-group">
+                    <label for="somatotype-select">🧬 Somatotype:</label>
+                    <select id="somatotype-select">
+                        <option value="">Select Somatotype</option>
+                        <option value="ECTO">Ectomorph</option>
+                        <option value="MESO">Mesomorph</option>
+                        <option value="ENDO">Endomorph</option>
                     </select>
                 </div>
-                <div class="filter-group">
-                    <label for="somatotype-filter">🧬 Best for Somatotype:</label>
-                    <select id="somatotype-filter">
-                        <option value="">All Somatotypes</option>
-                        <option value="ectomorph">Ectomorph</option>
-                        <option value="mesomorph">Mesomorph</option>
-                        <option value="endomorph">Endomorph</option>
+                <div class="preference-group">
+                    <label for="gender-select">⚥ Gender:</label>
+                    <select id="gender-select">
+                        <option value="">Select Gender</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
                     </select>
                 </div>
-                <div class="filter-group">
-                    <label for="goal-filter">🎯 Best for Goal:</label>
-                    <select id="goal-filter">
-                        <option value="">All Goals</option>
-                        <option value="weight_loss">Weight Loss</option>
-                        <option value="weight_gain">Weight Gain</option>
-                        <option value="maintenance">Maintenance</option>
+                <div class="preference-group">
+                    <label for="goal-select">🎯 Goal:</label>
+                    <select id="goal-select">
+                        <option value="">Select Goal</option>
+                        <option value="WEIGHT_LOSS">Weight Loss</option>
+                        <option value="WEIGHT_GAIN">Weight Gain</option>
+                        <option value="MUSCLE_GAIN">Muscle Gain</option>
+                        <option value="MAINTENANCE">Maintenance</option>
+                    </select>
+                </div>
+                <div class="preference-group">
+                    <label for="activity-select">🏃 Activity Level:</label>
+                    <select id="activity-select">
+                        <option value="">Select Activity</option>
+                        <option value="SEDE">Sedentary</option>
+                        <option value="LIGHTLY_ACTIVE">Lightly Active</option>
+                        <option value="MODERATELY_ACTIVE">Moderately Active</option>
+                        <option value="VERY_ACTIVE">Very Active</option>
+                        <option value="EXTREMELY_ACTIVE">Extremely Active</option>
+                    </select>
+                </div>
+                <div class="preference-group">
+                    <label for="experience-select">💪 Experience:</label>
+                    <select id="experience-select">
+                        <option value="">Select Experience</option>
+                        <option value="BEG">Beginner</option>
+                        <option value="INT">Intermediate</option>
+                        <option value="ADV">Advanced</option>
+                    </select>
+                </div>
+                <div class="preference-group">
+                    <label for="location-select">🏠 Location:</label>
+                    <select id="location-select">
+                        <option value="">Select Location</option>
+                        <option value="GYM">Gym</option>
+                        <option value="HOME">Home</option>
                     </select>
                 </div>
             </div>
-            <div class="filter-row">
-                <div class="filter-group">
-                    <label for="calories-min">🔥 Min Calories (per 100g):</label>
-                    <input type="number" id="calories-min" placeholder="0" min="0">
-                </div>
-                <div class="filter-group">
-                    <label for="calories-max">🔥 Max Calories (per 100g):</label>
-                    <input type="number" id="calories-max" placeholder="1000" min="0">
-                </div>
-                <div class="filter-group">
-                    <label for="protein-min">💪 Min Protein (g per 100g):</label>
-                    <input type="number" id="protein-min" placeholder="0" min="0" step="0.1">
-                </div>
-            </div>
-            <div class="search-box">
-                <div class="filter-group">
-                    <label for="food-search">🔍 Search Foods:</label>
-                    <input type="text" id="food-search" placeholder="Search by food name..." style="width: 100%;">
-                </div>
+            
+            <div class="template-info" id="template-info">
+                🔍 Select your preferences to view matching food recommendations
             </div>
         </div>
 
-        <div class="stats-bar" id="stats-bar">
-            Loading food database...
-        </div>
-
-        <div class="foods-grid" id="foods-container">
-            <div class="loading">🔄 Loading food database...</div>
+        <div id="results-container">
+            <div class="loading">📋 Select your preferences to see personalized meal recommendations...</div>
         </div>
     </div>
 
     <script>
-        // Global variables to store loaded data
-        let allFoods = [];
-        let filteredFoods = [];
+        // Global variables
         let allTemplates = [];
+        let allFoods = [];
+        let currentTemplate = null;
+        let matchingFoods = {};
 
-        // Load data from actual files
+        // Load data from files
         async function loadData() {
             try {
-                console.log('🔄 Loading food database and templates...');
+                console.log('🔄 Loading templates and food database...');
+                
+                // Load templates
+                const templateResponse = await fetch('./fixed_comprehensive_diet_templates_with_proper_exercise_ids.csv');
+                if (!templateResponse.ok) {
+                    throw new Error(`Failed to load templates: ${templateResponse.status}`);
+                }
+                const templateCsvText = await templateResponse.text();
+                console.log('✅ Templates loaded');
                 
                 // Load food database
                 const foodResponse = await fetch('./optimized_diet_recommendation_database.csv');
                 if (!foodResponse.ok) {
-                    throw new Error(`Failed to load food database: ${foodResponse.status} ${foodResponse.statusText}`);
+                    throw new Error(`Failed to load food database: ${foodResponse.status}`);
                 }
                 const foodCsvText = await foodResponse.text();
-                console.log('✅ Food database loaded successfully');
-                
-                // Load templates for recommendations
-                const templateResponse = await fetch('./fixed_comprehensive_diet_templates_with_proper_exercise_ids.csv');
-                if (!templateResponse.ok) {
-                    throw new Error(`Failed to load templates: ${templateResponse.status} ${templateResponse.statusText}`);
-                }
-                const templateCsvText = await templateResponse.text();
-                console.log('✅ Templates loaded successfully');
+                console.log('✅ Food database loaded');
                 
                 // Parse data
-                allFoods = parseCSVData(foodCsvText);
                 allTemplates = parseCSVData(templateCsvText);
-                filteredFoods = [...allFoods];
-                console.log('✅ Parsed:', allFoods.length, 'foods and', allTemplates.length, 'templates');
+                allFoods = parseCSVData(foodCsvText);
+                console.log('✅ Parsed:', allTemplates.length, 'templates and', allFoods.length, 'foods');
                 
-                // Setup UI
-                populateFilterOptions();
-                renderFoods();
-                updateStats();
+                // Create food lookup map for faster access
+                createFoodLookupMap();
+                
+                // Setup event listeners
                 setupEventListeners();
                 
             } catch (error) {
                 console.error('❌ Error loading data:', error);
-                document.getElementById('foods-container').innerHTML = `
+                document.getElementById('results-container').innerHTML = `
                     <div class="error">
                         ❌ Error loading data: ${error.message}
-                        <br><br>Please ensure all files are in the correct location:
-                        <br>• optimized_diet_recommendation_database.csv
+                        <br><br>Please ensure these files exist:
                         <br>• fixed_comprehensive_diet_templates_with_proper_exercise_ids.csv
+                        <br>• optimized_diet_recommendation_database.csv
                     </div>
                 `;
             }
         }
 
-        // Utility Functions
         function parseCSVData(csvString) {
             const lines = csvString.trim().split('\n');
             const headers = lines[0].split(',');
@@ -478,231 +473,259 @@
             return data;
         }
 
-        function populateFilterOptions() {
-            const categoryFilter = document.getElementById('category-filter');
-            const categories = [...new Set(allFoods.map(food => food.Enhanced_Category))].filter(cat => cat).sort();
-            
-            categories.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category;
-                option.textContent = formatText(category);
-                categoryFilter.appendChild(option);
+        function createFoodLookupMap() {
+            matchingFoods = {};
+            allFoods.forEach(food => {
+                const foodName = food.Food_Item.toLowerCase().trim();
+                matchingFoods[foodName] = food;
             });
+        }
+
+        function findMatchingTemplate() {
+            const preferences = {
+                somatotype: document.getElementById('somatotype-select').value,
+                gender: document.getElementById('gender-select').value,
+                goal: document.getElementById('goal-select').value,
+                activity: document.getElementById('activity-select').value,
+                experience: document.getElementById('experience-select').value,
+                location: document.getElementById('location-select').value
+            };
+
+            // Check if all preferences are selected
+            const allSelected = Object.values(preferences).every(value => value !== '');
+            if (!allSelected) {
+                currentTemplate = null;
+                updateTemplateInfo('🔍 Please select all preferences to view recommendations');
+                document.getElementById('results-container').innerHTML = 
+                    '<div class="loading">📋 Complete your preferences to see personalized meal recommendations...</div>';
+                return;
+            }
+
+            // Find matching template
+            const template = allTemplates.find(t => 
+                t.somatotype === preferences.somatotype &&
+                t.gender === preferences.gender &&
+                t.goal === preferences.goal &&
+                t.activity_level === preferences.activity &&
+                t.experience_level === preferences.experience &&
+                t.location === preferences.location
+            );
+
+            if (template) {
+                currentTemplate = template;
+                updateTemplateInfo(`✅ Found matching template: ${template.template_id || 'Template Found'}`);
+                renderMealRecommendations();
+            } else {
+                currentTemplate = null;
+                updateTemplateInfo('❌ No template found for these preferences. Try different combinations.');
+                document.getElementById('results-container').innerHTML = 
+                    '<div class="no-results">🔍 No matching template found for your preferences.<br>Try adjusting your selections.</div>';
+            }
+        }
+
+        function updateTemplateInfo(message) {
+            document.getElementById('template-info').innerHTML = message;
+        }
+
+        function getFoodDetails(foodName) {
+            const cleanName = foodName.toLowerCase().trim();
+            
+            // Try exact match first
+            if (matchingFoods[cleanName]) {
+                return matchingFoods[cleanName];
+            }
+            
+            // Try partial matches
+            for (const [dbFoodName, foodData] of Object.entries(matchingFoods)) {
+                if (dbFoodName.includes(cleanName) || cleanName.includes(dbFoodName)) {
+                    return foodData;
+                }
+            }
+            
+            // Return default if not found
+            return {
+                Food_Item: foodName,
+                Enhanced_Category: 'Unknown',
+                Calories_kcal: '0',
+                Protein_g: '0',
+                Carbohydrates_g: '0',
+                Fat_g: '0'
+            };
+        }
+
+        function createFoodCard(foodName) {
+            const foodDetails = getFoodDetails(foodName);
+            const calories = parseFloat(foodDetails.Calories_kcal) || 0;
+            const protein = parseFloat(foodDetails.Protein_g) || 0;
+            const carbs = parseFloat(foodDetails.Carbohydrates_g) || 0;
+            const fat = parseFloat(foodDetails.Fat_g) || 0;
+
+            return `
+                <div class="food-item">
+                    <div class="food-name">${foodName}</div>
+                    <div class="food-category">${formatText(foodDetails.Enhanced_Category || 'Other')}</div>
+                    <div class="macros-display">
+                        <div class="macro-item calories-macro">
+                            <div class="macro-label">Calories</div>
+                            <div class="macro-value">${calories.toFixed(0)}</div>
+                        </div>
+                        <div class="macro-item protein-macro">
+                            <div class="macro-label">Protein</div>
+                            <div class="macro-value">${protein.toFixed(1)}g</div>
+                        </div>
+                        <div class="macro-item carbs-macro">
+                            <div class="macro-label">Carbs</div>
+                            <div class="macro-value">${carbs.toFixed(1)}g</div>
+                        </div>
+                        <div class="macro-item fat-macro">
+                            <div class="macro-label">Fat</div>
+                            <div class="macro-value">${fat.toFixed(1)}g</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function calculateMealMacros(foodsArray) {
+            let totalCalories = 0, totalProtein = 0, totalCarbs = 0, totalFat = 0;
+            
+            foodsArray.forEach(foodName => {
+                const foodDetails = getFoodDetails(foodName);
+                totalCalories += parseFloat(foodDetails.Calories_kcal) || 0;
+                totalProtein += parseFloat(foodDetails.Protein_g) || 0;
+                totalCarbs += parseFloat(foodDetails.Carbohydrates_g) || 0;
+                totalFat += parseFloat(foodDetails.Fat_g) || 0;
+            });
+
+            return {
+                calories: totalCalories,
+                protein: totalProtein,
+                carbs: totalCarbs,
+                fat: totalFat
+            };
+        }
+
+        function createMealSection(mealType, foods, headerClass) {
+            if (!foods || foods.length === 0) {
+                return `
+                    <div class="meal-section">
+                        <div class="meal-header ${headerClass}">
+                            ${getMealIcon(mealType)} ${formatMealName(mealType)}
+                        </div>
+                        <div class="meal-foods">
+                            <div class="food-item">
+                                <div class="food-name">No foods recommended for this meal</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const foodCards = foods.map(createFoodCard).join('');
+            const macros = calculateMealMacros(foods);
+            
+            return `
+                <div class="meal-section">
+                    <div class="meal-header ${headerClass}">
+                        ${getMealIcon(mealType)} ${formatMealName(mealType)}
+                        <div style="font-size: 0.9rem; margin-top: 5px; opacity: 0.9;">
+                            ${foods.length} food${foods.length !== 1 ? 's' : ''}
+                        </div>
+                    </div>
+                    <div class="meal-foods">
+                        ${foodCards}
+                        <div class="meal-summary">
+                            <div class="summary-title">📊 Meal Totals (per 100g portions)</div>
+                            <div class="summary-macros">
+                                <div class="summary-macro">
+                                    <div class="summary-macro-label">Calories</div>
+                                    <div class="summary-macro-value">${macros.calories.toFixed(0)}</div>
+                                </div>
+                                <div class="summary-macro">
+                                    <div class="summary-macro-label">Protein</div>
+                                    <div class="summary-macro-value">${macros.protein.toFixed(1)}g</div>
+                                </div>
+                                <div class="summary-macro">
+                                    <div class="summary-macro-label">Carbs</div>
+                                    <div class="summary-macro-value">${macros.carbs.toFixed(1)}g</div>
+                                </div>
+                                <div class="summary-macro">
+                                    <div class="summary-macro-label">Fat</div>
+                                    <div class="summary-macro-value">${macros.fat.toFixed(1)}g</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getMealIcon(mealType) {
+            const icons = {
+                'breakfast': '🌅',
+                'lunch': '☀️',
+                'dinner': '🌆',
+                'snacks': '🍿'
+            };
+            return icons[mealType] || '🍽️';
+        }
+
+        function formatMealName(mealType) {
+            return mealType.charAt(0).toUpperCase() + mealType.slice(1);
         }
 
         function formatText(text) {
             return text.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         }
 
-        function getBestSomatotype(food) {
-            const scores = [
-                { type: 'ectomorph', score: parseFloat(food.Ectomorph_Score) || 0 },
-                { type: 'mesomorph', score: parseFloat(food.Mesomorph_Score) || 0 },
-                { type: 'endomorph', score: parseFloat(food.Endomorph_Score) || 0 }
-            ];
-            return scores.reduce((max, current) => current.score > max.score ? current : max);
+        function parseFoodList(foodsString) {
+            if (!foodsString || foodsString.trim() === '') return [];
+            return foodsString.split('|').map(food => food.trim()).filter(food => food !== '');
         }
 
-        function getBestGoal(food) {
-            const scores = [
-                { type: 'weight_loss', score: parseFloat(food.Weight_Loss_Score) || 0 },
-                { type: 'weight_gain', score: parseFloat(food.Weight_Gain_Score) || 0 },
-                { type: 'maintenance', score: parseFloat(food.Maintenance_Score) || 0 }
-            ];
-            return scores.reduce((max, current) => current.score > max.score ? current : max);
-        }
+        function renderMealRecommendations() {
+            if (!currentTemplate) return;
 
-        function isRecommendedInTemplates(foodName) {
-            return allTemplates.some(template => {
-                const allMeals = [
-                    template.breakfast_foods,
-                    template.lunch_foods,
-                    template.dinner_foods,
-                    template.snack_foods
-                ].join(' | ').toLowerCase();
-                return allMeals.includes(foodName.toLowerCase());
-            });
-        }
+            // Parse food lists from template
+            const breakfastFoods = parseFoodList(currentTemplate.breakfast_foods);
+            const lunchFoods = parseFoodList(currentTemplate.lunch_foods);
+            const dinnerFoods = parseFoodList(currentTemplate.dinner_foods);
+            const snackFoods = parseFoodList(currentTemplate.snack_foods);
 
-        function createFoodCard(food) {
-            const calories = parseFloat(food.Calories_kcal) || 0;
-            const protein = parseFloat(food.Protein_g) || 0;
-            const carbs = parseFloat(food.Carbohydrates_g) || 0;
-            const fat = parseFloat(food.Fat_g) || 0;
-            const fiber = parseFloat(food.Fiber_g) || 0;
-            const sugars = parseFloat(food.Sugars_g) || 0;
-            
-            const bestSomatotype = getBestSomatotype(food);
-            const bestGoal = getBestGoal(food);
-            const isRecommended = isRecommendedInTemplates(food.Food_Item);
-            
-            const qualityScore = parseFloat(food.Overall_Quality) || 0;
-            const nutrientDensity = parseFloat(food.Nutrient_Density_Score) || 0;
-
-            return `
-                <div class="food-card">
-                    <div class="food-name">${food.Food_Item}${isRecommended ? ' ⭐' : ''}</div>
-                    <div class="food-category">${formatText(food.Enhanced_Category || 'Other')}</div>
-                    
-                    <div class="calories-display">
-                        <div class="calories-label">Calories (per 100g)</div>
-                        <div class="calories-value">${calories.toFixed(0)}</div>
+            // Create template details
+            const templateDetails = `
+                <div class="template-details">
+                    <div class="template-id">📋 ${currentTemplate.template_id || 'Diet Template'}</div>
+                    <div class="template-stats">
+                        Target Calories: ${currentTemplate.total_calories || 'N/A'} | 
+                        Protein: ${currentTemplate.total_protein || 'N/A'}g | 
+                        Carbs: ${currentTemplate.total_carbohydrates || 'N/A'}g | 
+                        Fat: ${currentTemplate.total_fat || 'N/A'}g
                     </div>
-
-                    <div class="macros-grid">
-                        <div class="macro-box">
-                            <div class="macro-label">Protein</div>
-                            <div class="macro-value">${protein.toFixed(1)}g</div>
-                        </div>
-                        <div class="macro-box">
-                            <div class="macro-label">Carbs</div>
-                            <div class="macro-value">${carbs.toFixed(1)}g</div>
-                        </div>
-                        <div class="macro-box">
-                            <div class="macro-label">Fat</div>
-                            <div class="macro-value">${fat.toFixed(1)}g</div>
-                        </div>
-                    </div>
-
-                    <div class="fiber-sugar-info">
-                        <div class="fiber-box">
-                            <strong>Fiber:</strong> ${fiber.toFixed(1)}g
-                        </div>
-                        <div class="sugar-box">
-                            <strong>Sugar:</strong> ${sugars.toFixed(1)}g
-                        </div>
-                    </div>
-
-                    <div class="scores-section">
-                        <div class="scores-title">🎯 Goal Suitability Scores</div>
-                        <div class="scores-grid">
-                            <div class="score-item goal-score">
-                                <strong>Loss:</strong> ${food.Weight_Loss_Score}/10
-                            </div>
-                            <div class="score-item goal-score">
-                                <strong>Gain:</strong> ${food.Weight_Gain_Score}/10
-                            </div>
-                            <div class="score-item goal-score">
-                                <strong>Maintain:</strong> ${food.Maintenance_Score}/10
-                            </div>
-                        </div>
-                        
-                        <div class="scores-title" style="margin-top: 10px;">🧬 Somatotype Scores</div>
-                        <div class="scores-grid">
-                            <div class="score-item somatotype-score">
-                                <strong>Ecto:</strong> ${food.Ectomorph_Score}/10
-                            </div>
-                            <div class="score-item somatotype-score">
-                                <strong>Meso:</strong> ${food.Mesomorph_Score}/10
-                            </div>
-                            <div class="score-item somatotype-score">
-                                <strong>Endo:</strong> ${food.Endomorph_Score}/10
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="quality-info">
-                        <div class="quality-label">Overall Quality Score</div>
-                        <div class="quality-value">${qualityScore.toFixed(1)}/20 | Nutrient Density: ${nutrientDensity.toFixed(1)}/10</div>
-                    </div>
-
-                    ${food.Meal_Timing ? `
-                        <div class="meal-timing">
-                            🍽️ Best timing: ${food.Meal_Timing.replace(/_/g, ' ')}
-                        </div>
-                    ` : ''}
-
-                    ${isRecommended ? `
-                        <div style="text-align: center; margin-top: 10px;">
-                            <span class="recommendation-badge">Featured in Templates</span>
-                        </div>
-                    ` : ''}
                 </div>
             `;
-        }
 
-        function applyFilters() {
-            const filters = {
-                category: document.getElementById('category-filter').value,
-                somatotype: document.getElementById('somatotype-filter').value,
-                goal: document.getElementById('goal-filter').value,
-                caloriesMin: parseFloat(document.getElementById('calories-min').value) || 0,
-                caloriesMax: parseFloat(document.getElementById('calories-max').value) || Infinity,
-                proteinMin: parseFloat(document.getElementById('protein-min').value) || 0,
-                search: document.getElementById('food-search').value.toLowerCase()
-            };
+            // Create meal sections
+            const mealsHTML = `
+                <div class="meals-container">
+                    ${createMealSection('breakfast', breakfastFoods, 'breakfast-header')}
+                    ${createMealSection('lunch', lunchFoods, 'lunch-header')}
+                    ${createMealSection('dinner', dinnerFoods, 'dinner-header')}
+                    ${createMealSection('snacks', snackFoods, 'snacks-header')}
+                </div>
+            `;
 
-            filteredFoods = allFoods.filter(food => {
-                const calories = parseFloat(food.Calories_kcal) || 0;
-                const protein = parseFloat(food.Protein_g) || 0;
-                
-                // Category filter
-                if (filters.category && food.Enhanced_Category !== filters.category) return false;
-                
-                // Numeric filters
-                if (calories < filters.caloriesMin || calories > filters.caloriesMax) return false;
-                if (protein < filters.proteinMin) return false;
-                
-                // Search filter
-                if (filters.search && !food.Food_Item.toLowerCase().includes(filters.search)) return false;
-                
-                // Somatotype filter (find foods best suited for this somatotype)
-                if (filters.somatotype) {
-                    const bestSomatotype = getBestSomatotype(food);
-                    if (bestSomatotype.type !== filters.somatotype) return false;
-                }
-                
-                // Goal filter (find foods best suited for this goal)
-                if (filters.goal) {
-                    const bestGoal = getBestGoal(food);
-                    if (bestGoal.type !== filters.goal) return false;
-                }
-                
-                return true;
-            });
-
-            renderFoods();
-            updateStats();
-        }
-
-        function renderFoods() {
-            const container = document.getElementById('foods-container');
-            
-            if (filteredFoods.length === 0) {
-                container.innerHTML = `
-                    <div class="no-results">
-                        🔍 No foods found matching your filters.<br>
-                        Try adjusting your filter criteria.
-                    </div>
-                `;
-                return;
-            }
-
-            // Sort by overall quality score (descending)
-            const sortedFoods = [...filteredFoods].sort((a, b) => 
-                (parseFloat(b.Overall_Quality) || 0) - (parseFloat(a.Overall_Quality) || 0)
-            );
-
-            container.innerHTML = sortedFoods.map(createFoodCard).join('');
-        }
-
-        function updateStats() {
-            const stats = document.getElementById('stats-bar');
-            const avgCalories = filteredFoods.length > 0 ? 
-                (filteredFoods.reduce((sum, food) => sum + (parseFloat(food.Calories_kcal) || 0), 0) / filteredFoods.length).toFixed(0) : 0;
-            stats.textContent = `📊 Showing ${filteredFoods.length} of ${allFoods.length} foods | Avg Calories: ${avgCalories}`;
+            document.getElementById('results-container').innerHTML = templateDetails + mealsHTML;
         }
 
         function setupEventListeners() {
-            const filterIds = ['category-filter', 'somatotype-filter', 'goal-filter', 'calories-min', 'calories-max', 'protein-min'];
-            filterIds.forEach(id => {
-                document.getElementById(id).addEventListener('change', applyFilters);
+            const selectors = ['somatotype-select', 'gender-select', 'goal-select', 'activity-select', 'experience-select', 'location-select'];
+            selectors.forEach(id => {
+                document.getElementById(id).addEventListener('change', findMatchingTemplate);
             });
-            
-            document.getElementById('food-search').addEventListener('input', applyFilters);
         }
 
-        // Initialize the app when DOM is loaded
+        // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', loadData);
     </script>
 </body>
