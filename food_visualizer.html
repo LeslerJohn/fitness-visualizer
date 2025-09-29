@@ -816,18 +816,15 @@
         function renderMealRecommendations(selectedFoodCategory = '') {
             if (!currentTemplate) return;
 
-            // Get all foods from template
-            const allTemplateFoods = [
-                ...parseFoodList(currentTemplate.breakfast_foods),
-                ...parseFoodList(currentTemplate.lunch_foods), 
-                ...parseFoodList(currentTemplate.dinner_foods),
-                ...parseFoodList(currentTemplate.snack_foods)
-            ];
+            console.log('🔍 Current template:', currentTemplate.template_id);
+            console.log('📊 Template meals:', {
+                breakfast: currentTemplate.breakfast_foods,
+                lunch: currentTemplate.lunch_foods,
+                dinner: currentTemplate.dinner_foods,
+                snacks: currentTemplate.snack_foods
+            });
 
-            // Remove duplicates
-            const uniqueFoods = [...new Set(allTemplateFoods)];
-
-            // Organize foods by meal type based on their Enhanced_Category
+            // Initialize organized meals structure
             const organizedMeals = {
                 breakfast: [],
                 lunch: [],
@@ -835,31 +832,36 @@
                 snacks: []
             };
 
-            uniqueFoods.forEach(foodName => {
-                const foodDetails = getFoodDetails(foodName);
-                const mealType = categorizeFoodByMealType(foodName, foodDetails);
-                organizedMeals[mealType].push(foodName);
-            });
-
-            // Filter by selected food category if specified
+            // If a specific category is selected, get foods directly from template
             if (selectedFoodCategory) {
-                const filteredMeals = {
-                    breakfast: [],
-                    lunch: [],
-                    dinner: [],
-                    snacks: []
-                };
-                filteredMeals[selectedFoodCategory] = organizedMeals[selectedFoodCategory];
-                organizedMeals.breakfast = selectedFoodCategory === 'breakfast' ? organizedMeals.breakfast : [];
-                organizedMeals.lunch = selectedFoodCategory === 'lunch' ? organizedMeals.lunch : [];
-                organizedMeals.dinner = selectedFoodCategory === 'dinner' ? organizedMeals.dinner : [];
-                organizedMeals.snacks = selectedFoodCategory === 'snacks' ? organizedMeals.snacks : [];
+                switch(selectedFoodCategory) {
+                    case 'breakfast':
+                        organizedMeals.breakfast = parseFoodList(currentTemplate.breakfast_foods);
+                        break;
+                    case 'lunch':
+                        organizedMeals.lunch = parseFoodList(currentTemplate.lunch_foods);
+                        break;
+                    case 'dinner':
+                        organizedMeals.dinner = parseFoodList(currentTemplate.dinner_foods);
+                        break;
+                    case 'snacks':
+                        organizedMeals.snacks = parseFoodList(currentTemplate.snack_foods);
+                        break;
+                }
+                console.log(`🍽️ Selected category "${selectedFoodCategory}" foods:`, organizedMeals[selectedFoodCategory]);
+            } else {
+                // Show all meals with their respective foods
+                organizedMeals.breakfast = parseFoodList(currentTemplate.breakfast_foods);
+                organizedMeals.lunch = parseFoodList(currentTemplate.lunch_foods);
+                organizedMeals.dinner = parseFoodList(currentTemplate.dinner_foods);
+                organizedMeals.snacks = parseFoodList(currentTemplate.snack_foods);
+                console.log('🍽️ All organized meals:', organizedMeals);
             }
 
             // Create template details
             const totalFoods = selectedFoodCategory ? 
                 organizedMeals[selectedFoodCategory].length : 
-                uniqueFoods.length;
+                organizedMeals.breakfast.length + organizedMeals.lunch.length + organizedMeals.dinner.length + organizedMeals.snacks.length;
             
             const templateDetails = `
                 <div class="template-details">
@@ -873,7 +875,7 @@
                     <div style="margin-top: 10px; font-size: 12px; color: #666;">
                         ${selectedFoodCategory ? 
                             `📊 Showing ${selectedFoodCategory.charAt(0).toUpperCase() + selectedFoodCategory.slice(1)} Foods: ${organizedMeals[selectedFoodCategory].length}` :
-                            `📊 Total Foods: ${uniqueFoods.length} | 🌅 Breakfast: ${organizedMeals.breakfast.length} | ☀️ Lunch: ${organizedMeals.lunch.length} | 🌆 Dinner: ${organizedMeals.dinner.length} | 🍿 Snacks: ${organizedMeals.snacks.length}`
+                            `📊 Total Foods: ${totalFoods} | 🌅 Breakfast: ${organizedMeals.breakfast.length} | ☀️ Lunch: ${organizedMeals.lunch.length} | 🌆 Dinner: ${organizedMeals.dinner.length} | 🍿 Snacks: ${organizedMeals.snacks.length}`
                         }
                     </div>
                 </div>
